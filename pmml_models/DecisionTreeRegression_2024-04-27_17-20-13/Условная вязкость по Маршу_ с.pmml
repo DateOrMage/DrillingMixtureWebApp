@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.107.0"/>
+		<Timestamp>2024-04-27T14:20:15Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="y" optype="continuous" dataType="double"/>
+		<DataField name="x1" optype="continuous" dataType="float"/>
+		<DataField name="x3" optype="continuous" dataType="float"/>
+		<DataField name="x4" optype="continuous" dataType="float"/>
+	</DataDictionary>
+	<TreeModel functionName="regression" algorithmName="sklearn.tree._classes.DecisionTreeRegressor" splitCharacteristic="binarySplit">
+		<MiningSchema>
+			<MiningField name="y" usageType="target"/>
+			<MiningField name="x1"/>
+			<MiningField name="x4"/>
+			<MiningField name="x3"/>
+		</MiningSchema>
+		<LocalTransformations>
+			<DerivedField name="double(x1)" optype="continuous" dataType="double">
+				<FieldRef field="x1"/>
+			</DerivedField>
+			<DerivedField name="double(x4)" optype="continuous" dataType="double">
+				<FieldRef field="x4"/>
+			</DerivedField>
+			<DerivedField name="double(x3)" optype="continuous" dataType="double">
+				<FieldRef field="x3"/>
+			</DerivedField>
+		</LocalTransformations>
+		<Node id="0" score="76.36263736263736">
+			<True/>
+			<Node id="1" score="70.50641025641026">
+				<SimplePredicate field="double(x1)" operator="lessOrEqual" value="0.6666666716337204"/>
+				<Node id="2" score="74.11965811965813">
+					<SimplePredicate field="double(x4)" operator="lessOrEqual" value="0.1666666716337204"/>
+					<Node id="3" score="72.43956043956044">
+						<SimplePredicate field="double(x3)" operator="lessOrEqual" value="0.6666666716337204"/>
+					</Node>
+					<Node id="4" score="80.0">
+						<SimplePredicate field="double(x3)" operator="greaterThan" value="0.6666666716337204"/>
+					</Node>
+				</Node>
+				<Node id="5" score="59.666666666666664">
+					<SimplePredicate field="double(x4)" operator="greaterThan" value="0.1666666716337204"/>
+					<Node id="6" score="54.5">
+						<SimplePredicate field="double(x1)" operator="lessOrEqual" value="0.1666666716337204"/>
+					</Node>
+					<Node id="7" score="70.0">
+						<SimplePredicate field="double(x1)" operator="greaterThan" value="0.1666666716337204"/>
+					</Node>
+				</Node>
+			</Node>
+			<Node id="8" score="111.5">
+				<SimplePredicate field="double(x1)" operator="greaterThan" value="0.6666666716337204"/>
+				<Node id="9" score="151.0">
+					<SimplePredicate field="double(x4)" operator="lessOrEqual" value="0.5"/>
+				</Node>
+				<Node id="10" score="72.0">
+					<SimplePredicate field="double(x4)" operator="greaterThan" value="0.5"/>
+				</Node>
+			</Node>
+		</Node>
+	</TreeModel>
+</PMML>
