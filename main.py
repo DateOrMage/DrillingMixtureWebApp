@@ -1345,7 +1345,7 @@ def main(page: ft.Page):
         plt.subplots_adjust(left=0.15, right=1, top=1, bottom=0.1)
         sns.heatmap(abs(corr),
                     annot=True,
-                    cmap='autumn',
+                    cmap='copper',
                     cbar=True,
                     square=True,
                     ax=ax,
