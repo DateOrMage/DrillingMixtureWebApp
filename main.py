@@ -13,7 +13,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from flet.matplotlib_chart import MatplotlibChart
-from flet.plotly_chart import PlotlyChart
 import gc
 import json
 import pickle
@@ -21,6 +20,7 @@ import optuna
 import shutil
 from sklearn2pmml import sklearn2pmml
 from doepy3 import build
+import webbrowser
 
 optuna.logging.set_verbosity(optuna.logging.WARNING)  # TODO CHANGE to WARNING  /  DEBUG
 matplotlib.use("svg")
@@ -206,18 +206,57 @@ def main(page: ft.Page):
         back_button.disabled = False
         page.update()
 
+    def about_api_click(e):
+        icon_mode.name = ft.icons.DESCRIPTION
+        text_mode.value = 'О приложении'
+        main_buttons.visible = False
+        exp_field.visible = False
+        upload_obj.visible = False
+        ml.visible = False
+        opt_field.visible = False
+        about_api.visible = True
+        back_button.disabled = False
+        page.update()
+
     def back_button_click(e):
         exp_field.visible = False
         upload_obj.visible = False
         ml.visible = False
         opt_field.visible = False
+        about_api.visible = False
         main_buttons.visible = True
         back_button.disabled = True
         icon_mode.name = ft.icons.MENU
         text_mode.value = 'Главное меню'
         page.update()
 
-    main_buttons = ft.Row(
+    def pdf_instruction_click(e):
+        pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v1.pdf')
+        webbrowser.open_new(pdf_abs_path)
+
+    main_buttons = ft.Column(
+        [
+            ft.Container(
+            content=ft.Row(
+                [
+                    ft.Text('НАЗВАНИЕ', size=20, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD)
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.END,
+            ),
+                height=page.window_height/8 + my_app_bar_h,
+            ),
+            ft.Container(
+            content=ft.Row(
+                [
+                    ft.Text('Краткое описание', size=16, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD)
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+                height=page.window_height / 8,
+            ),
+
+            ft.Row(
         [
             ft.Container(
                 content=ft.Column(
@@ -226,7 +265,7 @@ def main(page: ft.Page):
                             [
                                 ft.IconButton(ft.icons.LIST, icon_size=55, icon_color=ft.colors.BLACK87,
                                               bgcolor=ft.colors.ORANGE_700, on_click=experiment_button_click,
-                                              tooltip='Параметры эксперемента;\nМетоды планирования;\n'
+                                              tooltip='Параметры эксперимента;\nМетоды планирования;\n'
                                                       'Отображение плана;\nСохранение результатов.'),
                             ],
                         ),
@@ -240,9 +279,8 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
-                height=page.window_height - my_app_bar_h,
+                height=page.window_height/2 - my_app_bar_h*2,
                 alignment=ft.alignment.center,
-                padding=ft.padding.only(top=my_app_bar_h),
             ),
             ft.Container(
                 content=ft.Column(
@@ -264,9 +302,8 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
-                height=page.window_height - my_app_bar_h,
+                height=page.window_height/2 - my_app_bar_h*2,
                 alignment=ft.alignment.center,
-                padding=ft.padding.only(top=my_app_bar_h),
             ),
             ft.Container(
                 content=ft.Column(
@@ -288,9 +325,8 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
-                height=page.window_height - my_app_bar_h,
+                height=page.window_height/2 - my_app_bar_h*2,
                 alignment=ft.alignment.center,
-                padding=ft.padding.only(top=my_app_bar_h),
             ),
             ft.Container(
                 content=ft.Column(
@@ -313,12 +349,14 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
-                height=page.window_height - my_app_bar_h,
+                height=page.window_height/2 - my_app_bar_h*2,
                 alignment=ft.alignment.center,
-                padding=ft.padding.only(top=my_app_bar_h),
             ),
         ],
         alignment=ft.MainAxisAlignment.SPACE_EVENLY,
+    ),
+            ],
+    spacing=0
     )
 
     icon_mode = ft.Icon(ft.icons.MENU, color=ft.colors.BLACK87, size=15, tooltip='Совет: для корректной работы функционала используйте "точку"(.)\n'
@@ -332,13 +370,20 @@ def main(page: ft.Page):
     container_mode = ft.Container(content=ft.Row([icon_mode, text_mode]))
 
     clear_db_button = ft.Image(src="icons/colba.png", width=35, height=35)
+    about_bar_button = ft.IconButton(ft.icons.DESCRIPTION, icon_color=ft.colors.BLACK87, icon_size=15,
+                                bgcolor=ft.colors.ORANGE_700, on_click=about_api_click, disabled=False,
+                                tooltip='О приложении')
+    instruction_button = ft.IconButton(ft.icons.INTEGRATION_INSTRUCTIONS, icon_color=ft.colors.BLACK87, icon_size=15,
+                                bgcolor=ft.colors.ORANGE_700, on_click=pdf_instruction_click, disabled=False,
+                                tooltip='Руководство пользователя')
+    right_side = ft.Container(content=ft.Row([about_bar_button, instruction_button, clear_db_button]))
 
     custom_appbar = ft.Container(
         content=ft.Row(
             [
                 back_button,
                 container_mode,
-                clear_db_button,
+                right_side,
             ],
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
         ),
@@ -348,6 +393,25 @@ def main(page: ft.Page):
                                    colors=[ft.colors.ORANGE_300, ft.colors.GREY_700])
     )
     page.overlay.append(custom_appbar)
+
+    # --- ABOUT API ---
+
+    about_txt = ft.Row(
+        [
+            ft.Text('О приложении', color=ft.colors.BLACK, weight=ft.FontWeight.BOLD),
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+    )
+
+    about_api = ft.Column(
+        [
+          ft.Container(content=about_txt,
+                       height=page.window_height - my_app_bar_h,
+                       alignment=ft.alignment.center,
+                       padding=ft.padding.only(top=my_app_bar_h),)
+        ],
+        visible=False
+    )
 
     # --- DESIGN EXPERIMENT ---
     page.input_factors_params = None
@@ -1450,13 +1514,19 @@ def main(page: ft.Page):
         mean_val = np.round(page.df_to_view[hist_dict_dd.value].mean(), 4)
         std_val = np.round(page.df_to_view[hist_dict_dd.value].std(), 4)
         median_val = np.round(page.df_to_view[hist_dict_dd.value].median(), 4)
+        plus_2_s = np.round(mean_val + 2 * std_val, 4)
+        minus_2_s = np.round(mean_val - 2 * std_val, 4)
+        count_up_2_s = len(page.df_to_view[hist_dict_dd.value][page.df_to_view[hist_dict_dd.value] > plus_2_s])
+        count_low_2_s = len(page.df_to_view[hist_dict_dd.value][page.df_to_view[hist_dict_dd.value] < minus_2_s])
         plus_3_s = np.round(mean_val + 3 * std_val, 4)
         minus_3_s = np.round(mean_val - 3 * std_val, 4)
         count_up_3_s = len(page.df_to_view[hist_dict_dd.value][page.df_to_view[hist_dict_dd.value] > plus_3_s])
         count_low_3_s = len(page.df_to_view[hist_dict_dd.value][page.df_to_view[hist_dict_dd.value] < minus_3_s])
         stat_str = f'Минимум: {min_val}\nМаксимум: {max_val}\nСреднее: {mean_val}\nСтанд.откл. (\u03c3): {std_val}' \
-                   f'\nМедиана: {median_val}\nСр. +3 \u03c3 : {plus_3_s}\nСр. -3 \u03c3 : {minus_3_s}' \
-                   f'\nКол-во значений > +3 \u03c3 : {count_up_3_s}\nКол-во значений < -3 \u03c3 : {count_low_3_s}'
+                   f'\nМедиана: {median_val}\nСр. +2 \u03c3 : {plus_2_s}\nСр. -2 \u03c3 : {minus_2_s}\nКол-во значений' \
+                   f' > +2 \u03c3 : {count_up_2_s}\nКол-во значений < -2 \u03c3 : {count_low_2_s}\nСр. +3 \u03c3 :' \
+                   f' {plus_3_s}\nСр. -3 \u03c3 : {minus_3_s}\nКол-во значений > +3 \u03c3 : {count_up_3_s}\nКол-во' \
+                   f' значений < -3 \u03c3 : {count_low_3_s}'
         fig, ax = plt.subplots(figsize=(9, 5))
 
         ax = sns.histplot(page.df_to_view[hist_dict_dd.value], bins=30, kde=True, color='mediumslateblue', alpha=0.7,
@@ -2867,8 +2937,8 @@ def main(page: ft.Page):
     page.res_opt_str = None
     page.dump_opt_data = None
     page.is_multi_obj = False
-    page.opt_solution = None
     page.criteria_names = None
+    page.criteria_dict = None
 
     def auto_change_options(e):
         if opt_algorithm_dd.value == 'TPE':
@@ -3081,25 +3151,34 @@ def main(page: ft.Page):
 
                 pr_optimization.controls[1].value = 'Формирование результатов...'
                 pr_optimization.update()
-                page.opt_solution = study
                 unique_pareto_df = pd.DataFrame()
                 if opt_counter > 1:
                     start_time_list_creating = time.time()
-                    unique_pareto_list_dict = [fz_trial.params for fz_trial in study.best_trials]
+                    unique_pareto_list_dict = []
+                    for idx_trial, fz_trial in enumerate(study.best_trials):
+                        unique_pareto_list_dict.append(fz_trial.params)
+                        if idx_trial % 10 == 0:
+                            est_percent = min(int((idx_trial / (num_trials/2)) * 100), 100)
+                            pr_optimization.controls[1].value = f'Формирование результатов - {est_percent}%'
+                            pr_optimization.update()
                     unique_pareto_df = pd.DataFrame(data=unique_pareto_list_dict)
                     del unique_pareto_list_dict
                     unique_pareto_df = unique_pareto_df.drop_duplicates()
                     unique_pareto_df.reset_index(drop=True, inplace=True)
-                    # my_df.to_csv('my_study_df.csv', index=False)
-                    # print(my_df)
+
                     stop_time_list_creating = time.time()
                     print(f'Time unique_pareto_df creating: {stop_time_list_creating - start_time_list_creating} sec')
 
+                pr_optimization.controls[1].value = 'Формирование результатов - 100%'
+                pr_optimization.update()
                 pr_optimization.controls[1].value = 'Обработка результатов...'
                 pr_optimization.update()
                 opt_criteria_names = [config_opt['criteria']['names'][idx] for idx, val in
                                       enumerate(config_opt['criteria']['opt']) if val is not None]
-                page.criteria_names = opt_criteria_names
+                if opt_counter > 1:
+                    page.criteria_dict = dict(zip(opt_criteria_names, opt_directions))
+                    page.criteria_names = opt_criteria_names
+
                 opt_constraint_names = []
                 for i_cfg in range(len(config_opt['criteria']['names'])):
                     if config_opt['criteria']['<='][i_cfg] is not None or config_opt['criteria']['>='][i_cfg] is not None:
@@ -3388,24 +3467,81 @@ def main(page: ft.Page):
     # PARETO CHART
 
     def pareto_chart_generator(e):
-        fig_pareto = optuna.visualization.plot_pareto_front(
-            page.opt_solution,
-            targets=lambda t: (t.values[page.criteria_names.index(pareto_x_axis_dd.value)],
-                               t.values[page.criteria_names.index(pareto_y_axis_dd.value)]),
-            target_names=[pareto_x_axis_dd.value, pareto_y_axis_dd.value],
-            include_dominated_trials=False
-        )
-        # fig_pareto.show()
-        pareto_charts = [PlotlyChart(fig_pareto, original_size=False, isolated=True)]
+        df_chart = pd.DataFrame(data=page.dump_opt_data)
+        print(page.dump_opt_data)
+        print(page.criteria_dict)
+        df_chart = df_chart[[pareto_x_axis_dd.value, pareto_y_axis_dd.value]]
+        print(df_chart)
+        fig, ax = plt.subplots(figsize=(9, 9))
+        if len(page.criteria_names) > 2:
+            df_chart.sort_values(axis=0, by=[pareto_x_axis_dd.value], inplace=True)
+            df_chart.reset_index(drop=True, inplace=True)
+            stat_df_chart = df_chart.copy()
+            print(df_chart)
+            idx_list = []
+            if page.criteria_dict[pareto_x_axis_dd.value] == 'maximize' and page.criteria_dict[pareto_y_axis_dd.value] == 'maximize':
+                crit_idx = df_chart.shape[0]-1
+                while df_chart.shape[0] > 0:
+                    curr_idx = df_chart[pareto_y_axis_dd.value].idxmax()
+                    idx_list.append(curr_idx)
+                    if curr_idx+1 <= crit_idx:
+                        df_chart = df_chart.loc[curr_idx+1:, :]
+                    else:
+                        break
+            elif page.criteria_dict[pareto_x_axis_dd.value] == 'maximize' and page.criteria_dict[pareto_y_axis_dd.value] == 'minimize':
+                crit_idx = df_chart.shape[0] - 1
+                while df_chart.shape[0] > 0:
+                    curr_idx = df_chart[pareto_y_axis_dd.value].idxmin()
+                    idx_list.append(curr_idx)
+                    if curr_idx + 1 <= crit_idx:
+                        df_chart = df_chart.loc[curr_idx + 1:, :]
+                    else:
+                        break
+            elif page.criteria_dict[pareto_x_axis_dd.value] == 'minimize' and page.criteria_dict[pareto_y_axis_dd.value] == 'maximize':
+                crit_idx = 0
+                while df_chart.shape[0] > 0:
+                    curr_idx = df_chart[pareto_y_axis_dd.value].idxmax()
+                    idx_list.append(curr_idx)
+                    if curr_idx - 1 >= crit_idx:
+                        df_chart = df_chart.loc[:curr_idx - 1, :]
+                    else:
+                        break
+            elif page.criteria_dict[pareto_x_axis_dd.value] == 'minimize' and page.criteria_dict[pareto_y_axis_dd.value] == 'minimize':
+                crit_idx = 0
+                while df_chart.shape[0] > 0:
+                    curr_idx = df_chart[pareto_y_axis_dd.value].idxmin()
+                    idx_list.append(curr_idx)
+                    if curr_idx - 1 >= crit_idx:
+                        df_chart = df_chart.loc[:curr_idx - 1, :]
+                    else:
+                        break
+            else:
+                raise Exception(f'Unexpected direction of optimization')
+            df_chart = stat_df_chart.loc[idx_list, :]
+
+        ax.scatter(df_chart[pareto_x_axis_dd.value], df_chart[pareto_y_axis_dd.value], color='xkcd:dusty orange', s=55, edgecolor='xkcd:chocolate brown', linewidth=2)
+        ax.set_xlabel(pareto_x_axis_dd.value)
+        ax.set_ylabel(pareto_y_axis_dd.value)
+        ax.set_title(f'Парето фронт')
+        ax.grid(True)
+        plt.tight_layout()
+
+        pareto_charts = [MatplotlibChart(fig, original_size=False, transparent=False)]
+        plt.close()
+
         return pareto_charts
 
     def open_charts_ml_predict_ad(e):
-        if pareto_x_axis_dd.value is not None and pareto_y_axis_dd.value is not None:
-            if pareto_x_axis_dd.value != pareto_y_axis_dd.value:
-                show_pareto_chart_ad.content.controls = pareto_chart_generator(e)
-                page.dialog = show_pareto_chart_ad
-                show_pareto_chart_ad.open = True
-                page.update()
+        try:
+            if pareto_x_axis_dd.value is not None and pareto_y_axis_dd.value is not None:
+                if pareto_x_axis_dd.value != pareto_y_axis_dd.value:
+                    show_pareto_chart_ad.content.controls = pareto_chart_generator(e)
+                    page.dialog = show_pareto_chart_ad
+                    show_pareto_chart_ad.open = True
+                    page.update()
+        except Exception as ex:
+            print(f'{ex}')
+            pass
 
     show_pareto_chart_ad = ft.AlertDialog(
         modal=False,
@@ -3540,6 +3676,7 @@ def main(page: ft.Page):
             upload_obj,
             ml,
             opt_field,
+            about_api
         ],
             alignment=ft.MainAxisAlignment.CENTER
         )

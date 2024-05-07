@@ -6,3 +6,4 @@
 3. В командной строке ввести команду pip install -r <path_to_directory xxx>/xxx/requirements.txt
 4. По окончанию установки библиотек необходимо запустить скрипт командой python <path_to_directory xxx>/xxx/main.py
 5. Откроется ваш браузер по-умолчанию и запуститься веб-приложение
+6. !!!Для преобразования моделей в PMML формат необходимо установить Java Runtime Environment (JRE), https://java-runtime.ru/download
