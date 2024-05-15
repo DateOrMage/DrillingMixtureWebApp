@@ -146,18 +146,26 @@ def get_res_df(data_names: str) -> pd.DataFrame:
     del df
     res_df = pd.concat(df_list, ignore_index=True)
     costs_df = pd.read_excel(data_names_list[-1], skiprows=None, sheet_name=1)
+    units_df = pd.read_excel(data_names_list[-1], skiprows=None, sheet_name=2)
     del df_list
     res_df.columns = fix_names(res_df.columns)
     costs_df.columns = fix_names(costs_df.columns)
+    units_df.columns = fix_names(units_df.columns)
     if np.any(res_df.isnull() == True):
         res_df = res_df.fillna(0)
     if np.any(costs_df.isnull() == True):
         costs_df = costs_df.fillna(0)
+    if np.any(units_df.isnull() == True):
+        units_df = units_df.fillna('')
     print(res_df.info())
     cost_dict = {'names': costs_df.columns.to_list(), 'values': costs_df.values[0]}
     print(cost_dict)
     del costs_df
-    return res_df, cost_dict
+    units_dict = dict(zip(units_df.columns.to_list(), units_df.values[0]))
+    units_dict['Стоимость БР'] = 'руб.'
+    print(units_dict)
+    del units_df
+    return res_df, cost_dict, units_dict
 
 
 def main(page: ft.Page):
@@ -167,6 +175,7 @@ def main(page: ft.Page):
     # page.window_width = 3000
     page.df_to_view = None  # pd.read_excel("C:\\Users\\Aleksei\\Downloads\\Набор данных_БашНИПИ.xlsx", skiprows=2, sheet_name=1) # for desktop pres
     page.cost_dict = None
+    page.units_dict = None
     page.window_height = 800
     page.bgcolor = ft.colors.GREY_400
     page.scroll = 'adaptive'
@@ -1009,7 +1018,7 @@ def main(page: ft.Page):
         if selected_files.value != "Файл не выбран!":
             page.counter_feat_selector = 0
             page.counter_target_selector = 0
-            page.df_to_view, page.cost_dict = get_res_df(selected_files.value)
+            page.df_to_view, page.cost_dict, page.units_dict = get_res_df(selected_files.value)
             datatable.columns = [ft.DataColumn(
                 ft.Text(str(col_name)[:16], color=ft.colors.BLACK, size=9, width=50, text_align=ft.alignment.center))
                 for col_name in page.df_to_view]
@@ -1173,7 +1182,7 @@ def main(page: ft.Page):
                 else:
                     selected_files.value += f'\n{file_name_list[i]}'
 
-            page.df_to_view, page.cost_dict = get_res_df(selected_files.value)
+            page.df_to_view, page.cost_dict, page.units_dict = get_res_df(selected_files.value)
             datatable.columns = [ft.DataColumn(
                 ft.Text(str(col_name)[:16], color=ft.colors.BLACK, size=9, width=50, text_align=ft.alignment.center))
                 for col_name in page.df_to_view]
@@ -2224,7 +2233,10 @@ def main(page: ft.Page):
 
             for output_txt_field in outputs_predict_content.controls[1:]:  # skip title
                 output_txt_field.value = output_txt_field.value.split(': ')[0]
-                output_txt_field.value += ': ' + str(round(targets_values_dict[output_txt_field.value], 4))
+                try:
+                    output_txt_field.value += ': ' + str(round(targets_values_dict[output_txt_field.value], 2)) + ' ' + page.units_dict[output_txt_field.value]
+                except (TypeError, KeyError):
+                    output_txt_field.value += ': ' + str(round(targets_values_dict[output_txt_field.value], 2))
 
             outputs_predict_content.update()
 
@@ -2858,6 +2870,8 @@ def main(page: ft.Page):
                                                                                       width=150, ),
                                                                  height=38,
                                                                  alignment=ft.alignment.center))
+                        if _ == 'Стоимость БР':
+                            col.content.controls[-1].content.value = '1000000'
 
                 elif idx_col == 3:
                     for _ in ['Стоимость БР'] + page.model_metadata['targets']:
@@ -3048,6 +3062,7 @@ def main(page: ft.Page):
         pareto_chart_field.visible = False
         pareto_chart_field.update()
         config_opt = {'inputs': {}, 'criteria': {}, 'base_costs': None, 'add_cost': {'names': [], 'values': []}}
+        calc_costs_dict = {}
         try:
             if component_br_txt_field.controls[0].content is None:
                 component_br_button.autofocus = True
@@ -3055,12 +3070,17 @@ def main(page: ft.Page):
             elif type(component_br_txt_field.controls[0].content) is ft.Text:
                 config_opt['base_costs'] = 0
             else:
+                names_br = []
                 volumes = []
                 costs = []
                 for txt_field in component_br_txt_field.controls[0].content.controls:
                     volumes.append(float(txt_field.value))
                     costs.append(page.cost_dict['values'][page.cost_dict['names'].index(txt_field.label)])
-                config_opt['base_costs'] = get_cost_br(np.array(volumes), np.array(costs))
+                    names_br.append(txt_field.label)
+
+                calc_costs = np.array(volumes)*np.array(costs)
+                calc_costs_dict = dict(zip(names_br, calc_costs))
+                config_opt['base_costs'] = np.sum(calc_costs)  # get_cost_br(np.array(volumes), np.array(costs))
 
             if page.cost_dict is not None:
                 for input_feat in page.model_metadata.keys():
@@ -3187,17 +3207,21 @@ def main(page: ft.Page):
                 dump_opt_data = dict.fromkeys(config_opt['inputs']['names'] + opt_criteria_names + opt_constraint_names)
                 for k_name in dump_opt_data.keys():
                     dump_opt_data[k_name] = []
+                add_calc_costs_dict = {}
                 res_opt_str = ''
                 start_time_total = time.time()
                 if opt_counter == 1:
                     res_opt_str += 'Лучшее решение:\n'
-                    res_opt_str += '-' * 19 + '\n'
+                    res_opt_str += '=' * 36 + '\n'
                     res_opt_str += 'Параметры:\n'
                     for k in study.best_trial.params:
                         added_val = np.round(study.best_trial.params[k], 2)
-                        res_opt_str += f'{k}: {added_val}\n'
+                        try:
+                            res_opt_str += f'{k}: {added_val} {page.units_dict[k]}\n'
+                        except (TypeError, KeyError):
+                            res_opt_str += f'{k}: {added_val}\n'
                         dump_opt_data[k].append(added_val)
-                    res_opt_str += '-' * 19 + '\n'
+                    res_opt_str += '- ' * 36 + '\n'
                     res_opt_str += 'Критерии:\n'
                     criteria_values = []
                     for criteria_name in opt_criteria_names:
@@ -3223,12 +3247,24 @@ def main(page: ft.Page):
                                 add_volumes.append(study.best_trial.params[add_name])
                             br_cost += get_cost_br(np.array(add_volumes), config_opt['add_cost']['values'])
                             criteria_values.append(np.round(br_cost, 2))
+                            add_calc_costs = np.array(add_volumes) * config_opt['add_cost']['values']
+                            add_calc_costs_dict = dict(zip(config_opt['add_cost']['names'], add_calc_costs))
 
                     criteria_temp = dict(zip(opt_criteria_names, criteria_values))
                     for k in criteria_temp:
-                        res_opt_str += f'{k}: {criteria_temp[k]}\n'
+                        try:
+                            res_opt_str += f'{k}: {criteria_temp[k]} {page.units_dict[k]}\n'
+                        except (TypeError, KeyError):
+                            res_opt_str += f'{k}: {criteria_temp[k]}\n'
+                        if k == 'Стоимость БР':
+                            res_opt_str += '   Стоимость компонентов:\n'
+                            for k_component in calc_costs_dict:
+                                res_opt_str += f'   - {k_component}: {np.round(calc_costs_dict[k_component], 2)} руб.\n'
+                            for k_component in add_calc_costs_dict:
+                                res_opt_str += f'   - {k_component}: {np.round(add_calc_costs_dict[k_component], 2)} руб.\n'
+
                         dump_opt_data[k].append(criteria_temp[k])
-                    res_opt_str += '-' * 19 + '\n'
+                    res_opt_str += '- ' * 36 + '\n'
                     res_opt_str += 'Ограничения:\n'
                     constraint_values = []
                     for constraint_name in opt_constraint_names:
@@ -3254,24 +3290,39 @@ def main(page: ft.Page):
                                 add_volumes.append(study.best_trial.params[add_name])
                             br_cost += get_cost_br(np.array(add_volumes), config_opt['add_cost']['values'])
                             constraint_values.append(np.round(br_cost, 2))
+                            add_calc_costs = np.array(add_volumes) * config_opt['add_cost']['values']
+                            add_calc_costs_dict = dict(zip(config_opt['add_cost']['names'], add_calc_costs))
 
                     constraint_temp = dict(zip(opt_constraint_names, constraint_values))
                     for k in constraint_temp:
-                        res_opt_str += f'{k}: {constraint_temp[k]}\n'
+                        try:
+                            res_opt_str += f'{k}: {constraint_temp[k]} {page.units_dict[k]}\n'
+                        except (TypeError, KeyError):
+                            res_opt_str += f'{k}: {constraint_temp[k]}\n'
+                        if k == 'Стоимость БР':
+                            res_opt_str += '   Стоимость компонентов:\n'
+                            for k_component in calc_costs_dict:
+                                res_opt_str += f'   - {k_component}: {np.round(calc_costs_dict[k_component], 2)} руб.\n'
+                            for k_component in add_calc_costs_dict:
+                                res_opt_str += f'   - {k_component}: {np.round(add_calc_costs_dict[k_component], 2)} руб.\n'
+
                         dump_opt_data[k].append(constraint_temp[k])
-                    res_opt_str += '-' * 19 + '\n'
+                    res_opt_str += '=' * 36 + '\n'
                 else:  # MULTI OBJECTIVE OPTIMIZATION RESULT
                     ind_params_names = unique_pareto_df.columns.to_list()
                     res_opt_str += 'Лучшие решения:\n'
                     for idx_row in range(len(unique_pareto_df)):
 
-                        res_opt_str += '-' * 19 + '\n'
+                        res_opt_str += '=' * 36 + '\n'
                         res_opt_str += 'Параметры:\n'
                         for k in ind_params_names:
                             added_val = np.round(unique_pareto_df.loc[idx_row, k], 2)
-                            res_opt_str += f'{k}: {added_val}\n'
+                            try:
+                                res_opt_str += f'{k}: {added_val} {page.units_dict[k]}\n'
+                            except (TypeError, KeyError):
+                                res_opt_str += f'{k}: {added_val}\n'
                             dump_opt_data[k].append(added_val)
-                        res_opt_str += '-' * 19 + '\n'
+                        res_opt_str += '- ' * 36 + '\n'
                         res_opt_str += 'Критерии:\n'
 
                         criteria_values = []
@@ -3298,13 +3349,25 @@ def main(page: ft.Page):
                                     add_volumes.append(unique_pareto_df.loc[idx_row, add_name])
                                 br_cost += get_cost_br(np.array(add_volumes), config_opt['add_cost']['values'])
                                 criteria_values.append(np.round(br_cost, 2))
+                                add_calc_costs = np.array(add_volumes) * config_opt['add_cost']['values']
+                                add_calc_costs_dict = dict(zip(config_opt['add_cost']['names'], add_calc_costs))
 
                         criteria_temp = dict(zip(opt_criteria_names, criteria_values))
                         for k in criteria_temp:
-                            res_opt_str += f'{k}: {criteria_temp[k]}\n'
+                            try:
+                                res_opt_str += f'{k}: {criteria_temp[k]} {page.units_dict[k]}\n'
+                            except (TypeError, KeyError):
+                                res_opt_str += f'{k}: {criteria_temp[k]}\n'
+                            if k == 'Стоимость БР':
+                                res_opt_str += '   Стоимость компонентов:\n'
+                                for k_component in calc_costs_dict:
+                                    res_opt_str += f'   - {k_component}: {np.round(calc_costs_dict[k_component], 2)} руб.\n'
+                                for k_component in add_calc_costs_dict:
+                                    res_opt_str += f'   - {k_component}: {np.round(add_calc_costs_dict[k_component], 2)} руб.\n'
+
                             dump_opt_data[k].append(criteria_temp[k])
 
-                        res_opt_str += '-' * 19 + '\n'
+                        res_opt_str += '- ' * 36 + '\n'
                         res_opt_str += 'Ограничения:\n'
                         constraint_values = []
                         for constraint_name in opt_constraint_names:
@@ -3330,13 +3393,25 @@ def main(page: ft.Page):
                                     add_volumes.append(unique_pareto_df.loc[idx_row, add_name])
                                 br_cost += get_cost_br(np.array(add_volumes), config_opt['add_cost']['values'])
                                 constraint_values.append(np.round(br_cost, 2))
+                                add_calc_costs = np.array(add_volumes) * config_opt['add_cost']['values']
+                                add_calc_costs_dict = dict(zip(config_opt['add_cost']['names'], add_calc_costs))
 
                         constraint_temp = dict(zip(opt_constraint_names, constraint_values))
                         for k in constraint_temp:
-                            res_opt_str += f'{k}: {constraint_temp[k]}\n'
+                            try:
+                                res_opt_str += f'{k}: {constraint_temp[k]} {page.units_dict[k]}\n'
+                            except (TypeError, KeyError):
+                                res_opt_str += f'{k}: {constraint_temp[k]}\n'
+                            if k == 'Стоимость БР':
+                                res_opt_str += '   Стоимость компонентов:\n'
+                                for k_component in calc_costs_dict:
+                                    res_opt_str += f'   - {k_component}: {np.round(calc_costs_dict[k_component], 2)} руб.\n'
+                                for k_component in add_calc_costs_dict:
+                                    res_opt_str += f'   - {k_component}: {np.round(add_calc_costs_dict[k_component], 2)} руб.\n'
+
                             dump_opt_data[k].append(constraint_temp[k])
 
-                        res_opt_str += '-' * 19 + '\n'
+                        res_opt_str += '=' * 36 + '\n'
                         res_opt_str += '\n'
                     stop_time_total = time.time()
                     print(f"Total time processing Pareto front's: {stop_time_total - start_time_total} sec")
