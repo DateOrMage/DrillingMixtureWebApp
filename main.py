@@ -169,7 +169,7 @@ def get_res_df(data_names: str) -> pd.DataFrame:
 
 
 def main(page: ft.Page):
-    page.title = "Drilling Mixture"
+    page.title = "СмартБур"
     page.theme_mode = ft.ThemeMode.DARK
     # page.vertical_alignment = ft.MainAxisAlignment.CENTER
     # page.window_width = 3000
@@ -248,21 +248,24 @@ def main(page: ft.Page):
             ft.Container(
             content=ft.Row(
                 [
-                    ft.Text('НАЗВАНИЕ', size=20, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD)
+                    ft.Image(src="icons/logo_drill_main_page.png", width=page.window_height/6, height=page.window_height/6),
+                    ft.Text('СмартБур', size=20, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
-                vertical_alignment=ft.CrossAxisAlignment.END,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
-                height=page.window_height/8 + my_app_bar_h,
+                height=page.window_height/4 + my_app_bar_h,
+                # bgcolor=ft.colors.RED_200
             ),
             ft.Container(
             content=ft.Row(
                 [
-                    ft.Text('Краткое описание', size=16, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD)
+                    ft.Text('Оптимизация рецептуры бурового раствора на основании заданных критериев', size=16, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD)
                 ],
                 alignment=ft.MainAxisAlignment.CENTER
             ),
-                height=page.window_height / 8,
+                height=page.window_height / 15,
+                # bgcolor=ft.colors.GREEN_200,
             ),
 
             ft.Row(
@@ -407,7 +410,8 @@ def main(page: ft.Page):
 
     about_txt = ft.Row(
         [
-            ft.Text('О приложении', color=ft.colors.BLACK, weight=ft.FontWeight.BOLD),
+            ft.Text('"СмартБур" версия 1.0.1\n\nWeb-приложение для быстрой оценки технологических и экономических показателей бурового раствора с заданной рецептурой, возможностью запуска оптимизации, позволяющей в полевых условиях определять наиболее эффективное количество добавок, ХР и систем растворов, для создания промывочной жидкости, устойчивой к ухудшению реологических свойств при поступлении пластовых флюидов в процессе проявления',
+                    color=ft.colors.BLACK, weight=ft.FontWeight.BOLD, width=500),
         ],
         alignment=ft.MainAxisAlignment.CENTER,
     )
