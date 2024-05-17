@@ -162,7 +162,7 @@ def get_res_df(data_names: str) -> pd.DataFrame:
     print(cost_dict)
     del costs_df
     units_dict = dict(zip(units_df.columns.to_list(), units_df.values[0]))
-    units_dict['Стоимость БР'] = 'руб.'
+    units_dict['Стоимость БР'] = 'руб./м3'
     print(units_dict)
     del units_df
     return res_df, cost_dict, units_dict
@@ -242,6 +242,10 @@ def main(page: ft.Page):
     def pdf_instruction_click(e):
         pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v1.pdf')
         webbrowser.open_new(pdf_abs_path)
+
+    def run_exe_calc(e):
+        exe_abs_path = os.path.abspath('muTransformer.exe')
+        os.system(exe_abs_path)
 
     main_buttons = ft.Column(
         [
@@ -371,24 +375,27 @@ def main(page: ft.Page):
     spacing=0
     )
 
-    icon_mode = ft.Icon(ft.icons.MENU, color=ft.colors.BLACK87, size=15, tooltip='Совет: для корректной работы функционала используйте "точку"(.)\n'
+    icon_mode = ft.Icon(ft.icons.MENU, color=ft.colors.BLACK87, size=17, tooltip='Совет: для корректной работы функционала используйте "точку"(.)\n'
                                                                                  '       в качестве разделителя целой и дробной части чисел.')
     text_mode = ft.Text('Главное меню', color=ft.colors.BLACK, weight=ft.FontWeight.BOLD)
 
-    back_button = ft.IconButton(ft.icons.ARROW_BACK, icon_color=ft.colors.BLACK87, icon_size=15,
+    back_button = ft.IconButton(ft.icons.ARROW_BACK, icon_color=ft.colors.BLACK87, icon_size=17,
                                 bgcolor=ft.colors.ORANGE_700, on_click=back_button_click, disabled=True,
                                 tooltip='Вернуться в главное меню')
 
     container_mode = ft.Container(content=ft.Row([icon_mode, text_mode]))
 
     clear_db_button = ft.Image(src="icons/colba.png", width=35, height=35)
-    about_bar_button = ft.IconButton(ft.icons.DESCRIPTION, icon_color=ft.colors.BLACK87, icon_size=15,
+    about_bar_button = ft.IconButton(ft.icons.DESCRIPTION, icon_color=ft.colors.BLACK87, icon_size=17,
                                 bgcolor=ft.colors.ORANGE_700, on_click=about_api_click, disabled=False,
                                 tooltip='О приложении')
-    instruction_button = ft.IconButton(ft.icons.INTEGRATION_INSTRUCTIONS, icon_color=ft.colors.BLACK87, icon_size=15,
+    instruction_button = ft.IconButton(ft.icons.INTEGRATION_INSTRUCTIONS, icon_color=ft.colors.BLACK87, icon_size=17,
                                 bgcolor=ft.colors.ORANGE_700, on_click=pdf_instruction_click, disabled=False,
                                 tooltip='Руководство пользователя')
-    right_side = ft.Container(content=ft.Row([about_bar_button, instruction_button, clear_db_button]))
+    calculator_exe_button = ft.IconButton(ft.icons.CALCULATE, icon_color=ft.colors.BLACK87, icon_size=17,
+                                bgcolor=ft.colors.ORANGE_700, on_click=run_exe_calc, disabled=False,
+                                tooltip='Калькулятор перевода единиц измерения')
+    right_side = ft.Container(content=ft.Row([calculator_exe_button, about_bar_button, instruction_button, clear_db_button]))
 
     custom_appbar = ft.Container(
         content=ft.Row(
@@ -1415,7 +1422,7 @@ def main(page: ft.Page):
             new_header_names.append(col_name[:19])
         map_cols = dict(zip(df_for_corr.columns.to_list(), new_header_names))
         df_for_corr.rename(columns=map_cols, inplace=True)
-        corr = df_for_corr.corr()
+        corr = np.round(df_for_corr.corr(), 2)
         del df_for_corr
 
         fig, ax = plt.subplots(figsize=(14, 13))
@@ -2161,11 +2168,26 @@ def main(page: ft.Page):
 
     # INFERENCE INPUT/OUTPUT/BUTTON_PREDICT
 
+    def text_color_gen(e):
+        for txt_field in inputs_predict_content.controls[1:]:
+            try:
+                if (float(txt_field.value) > page.model_metadata[txt_field.label]['max']) or (float(txt_field.value) < page.model_metadata[txt_field.label]['min']):
+                    txt_field.color = ft.colors.RED_700
+                else:
+                    txt_field.color = ft.colors.BLUE_700
+            except (ValueError, TypeError):
+                txt_field.color = ft.colors.RED_700
+        inputs_predict_content.update()
+
     def inputs_predict_content_generator(e):
         while len(inputs_predict_content.controls) > 1:
             inputs_predict_content.controls.pop()
         for input_name in page.model_metadata.keys():
             if input_name != 'modelType' and input_name != 'targets':
+                try:
+                    suffix_unit_text = ' ' + page.units_dict[input_name]
+                except (TypeError, KeyError):
+                    suffix_unit_text = ' '
                 inputs_predict_content.controls.append(ft.TextField(label=input_name,
                                                                     label_style=ft.TextStyle(
                                                                       color=ft.colors.BLACK),
@@ -2174,6 +2196,11 @@ def main(page: ft.Page):
                                                                     focused_border_color=ft.colors.BLUE_700,
                                                                     cursor_color=ft.colors.BLUE_700,
                                                                     value=None,
+                                                                    suffix_text=suffix_unit_text,
+                                                                    suffix_style=ft.TextStyle(color=ft.colors.BLUE_900),
+                                                                    tooltip=f"min: {page.model_metadata[input_name]['min']}\n"
+                                                                            f"max: {page.model_metadata[input_name]['max']}",
+                                                                    on_change=text_color_gen,
                                                                     scale=0.75,
                                                                     height=40,
                                                                     width=250, ),)
@@ -2640,6 +2667,10 @@ def main(page: ft.Page):
             )
             for component_name in page.cost_dict['names']:
                 if component_name not in page.model_metadata['targets'] and component_name not in page.model_metadata.keys():
+                    try:
+                        suffix_unit_name = page.units_dict[component_name]
+                    except (TypeError, KeyError):
+                        suffix_unit_name = ''
                     component_br_txt_field.controls[0].content.controls.append(ft.TextField(label=component_name,
                                                                                             label_style=ft.TextStyle(
                                                                                               color=ft.colors.BLACK),
@@ -2648,6 +2679,8 @@ def main(page: ft.Page):
                                                                                             focused_border_color=ft.colors.BLUE_700,
                                                                                             cursor_color=ft.colors.BLUE_700,
                                                                                             value=0,
+                                                                                            suffix_text=suffix_unit_name,
+                                                                                            suffix_style=ft.TextStyle(color=ft.colors.BLUE_900),
                                                                                             scale=0.7,
                                                                                             width=150, ),)
             if len(component_br_txt_field.controls[0].content.controls) == 0:
@@ -2738,6 +2771,10 @@ def main(page: ft.Page):
                 elif idx_col == 1:
                     for feat_name in page.model_metadata.keys():
                         if feat_name != 'modelType' and feat_name != 'targets':
+                            try:
+                                suffix_unit_name = page.units_dict[feat_name]
+                            except (TypeError, KeyError):
+                                suffix_unit_name = ''
                             col.content.controls.append(ft.Container(content=ft.TextField(label='минимум',
                                                                                           label_style=ft.TextStyle(
                                                                                               color=ft.colors.BLACK),
@@ -2749,6 +2786,8 @@ def main(page: ft.Page):
                                                                                           value=str(np.round(page.model_metadata[
                                                                                                         feat_name][
                                                                                                         'min'], 2))[:13],
+                                                                                          suffix_text=suffix_unit_name,
+                                                                                          suffix_style=ft.TextStyle(color=ft.colors.BLUE_900),
                                                                                           scale=0.7,
                                                                                           width=150, ),
                                                                      height=38,
@@ -2756,6 +2795,10 @@ def main(page: ft.Page):
                 elif idx_col == 2:
                     for feat_name in page.model_metadata.keys():
                         if feat_name != 'modelType' and feat_name != 'targets':
+                            try:
+                                suffix_unit_name = page.units_dict[feat_name]
+                            except (TypeError, KeyError):
+                                suffix_unit_name = ''
                             col.content.controls.append(ft.Container(content=ft.TextField(label='максимум',
                                                                                           label_style=ft.TextStyle(
                                                                                               color=ft.colors.BLACK),
@@ -2766,6 +2809,9 @@ def main(page: ft.Page):
                                                                                           value=str(np.round(page.model_metadata[
                                                                                                         feat_name][
                                                                                                         'max'], 2))[:13],
+                                                                                          suffix_text=suffix_unit_name,
+                                                                                          suffix_style=ft.TextStyle(
+                                                                                              color=ft.colors.BLUE_900),
                                                                                           scale=0.7,
                                                                                           width=150, ),
                                                                      height=38,
@@ -2773,6 +2819,10 @@ def main(page: ft.Page):
                 else:
                     for feat_name in page.model_metadata.keys():
                         if feat_name != 'modelType' and feat_name != 'targets':
+                            try:
+                                suffix_unit_name = page.units_dict[feat_name]
+                            except (TypeError, KeyError):
+                                suffix_unit_name = ''
                             col.content.controls.append(ft.Container(content=ft.TextField(label='шаг',
                                                                                           label_style=ft.TextStyle(
                                                                                               color=ft.colors.BLACK),
@@ -2780,6 +2830,9 @@ def main(page: ft.Page):
                                                                                           text_size=15,
                                                                                           focused_border_color=ft.colors.BLUE_700,
                                                                                           cursor_color=ft.colors.BLUE_700,
+                                                                                          suffix_text=suffix_unit_name,
+                                                                                          suffix_style=ft.TextStyle(
+                                                                                              color=ft.colors.BLUE_900),
                                                                                           value=0.01,
                                                                                           scale=0.7,
                                                                                           width=150, ),
@@ -2863,22 +2916,10 @@ def main(page: ft.Page):
                             alignment=ft.alignment.center))
                 elif idx_col == 2:
                     for _ in ['Стоимость БР'] + page.model_metadata['targets']:
-                        col.content.controls.append(ft.Container(content=ft.TextField(label='<=',
-                                                                                      label_style=ft.TextStyle(
-                                                                                          color=ft.colors.BLACK),
-                                                                                      color=ft.colors.BLUE_700,
-                                                                                      text_size=15,
-                                                                                      focused_border_color=ft.colors.BLUE_700,
-                                                                                      cursor_color=ft.colors.BLUE_700,
-                                                                                      scale=0.7,
-                                                                                      width=150, ),
-                                                                 height=38,
-                                                                 alignment=ft.alignment.center))
-                        if _ == 'Стоимость БР':
-                            col.content.controls[-1].content.value = '1000000'
-
-                elif idx_col == 3:
-                    for _ in ['Стоимость БР'] + page.model_metadata['targets']:
+                        try:
+                            suffix_unit_name = page.units_dict[_]
+                        except (TypeError, KeyError):
+                            suffix_unit_name = ''
                         col.content.controls.append(ft.Container(content=ft.TextField(label='>=',
                                                                                       label_style=ft.TextStyle(
                                                                                           color=ft.colors.BLACK),
@@ -2886,10 +2927,36 @@ def main(page: ft.Page):
                                                                                       text_size=15,
                                                                                       focused_border_color=ft.colors.BLUE_700,
                                                                                       cursor_color=ft.colors.BLUE_700,
+                                                                                      suffix_text=suffix_unit_name,
+                                                                                      suffix_style=ft.TextStyle(
+                                                                                          color=ft.colors.BLUE_900),
                                                                                       scale=0.7,
                                                                                       width=150, ),
                                                                  height=38,
                                                                  alignment=ft.alignment.center))
+
+                elif idx_col == 3:
+                    for _ in ['Стоимость БР'] + page.model_metadata['targets']:
+                        try:
+                            suffix_unit_name = page.units_dict[_]
+                        except (TypeError, KeyError):
+                            suffix_unit_name = ''
+                        col.content.controls.append(ft.Container(content=ft.TextField(label='<=',
+                                                                                      label_style=ft.TextStyle(
+                                                                                          color=ft.colors.BLACK),
+                                                                                      color=ft.colors.BLUE_700,
+                                                                                      text_size=15,
+                                                                                      focused_border_color=ft.colors.BLUE_700,
+                                                                                      cursor_color=ft.colors.BLUE_700,
+                                                                                      suffix_text=suffix_unit_name,
+                                                                                      suffix_style=ft.TextStyle(
+                                                                                          color=ft.colors.BLUE_900),
+                                                                                      scale=0.7,
+                                                                                      width=150, ),
+                                                                 height=38,
+                                                                 alignment=ft.alignment.center))
+                        if _ == 'Стоимость БР':
+                            col.content.controls[-1].content.value = '1000000'
                 else:
                     for _ in ['Стоимость БР'] + page.model_metadata['targets']:
                         col.content.controls.append(ft.Container(content=ft.TextField(label='Вес критерия',
@@ -3112,7 +3179,9 @@ def main(page: ft.Page):
             for idx_container, col_container in enumerate(criteria_bound_table.controls):
                 col_table = []
                 for value_container in col_container.content.controls:
-                    if idx_container == 0 or idx_container == 1:
+                    if idx_container == 0:
+                            col_table.append(value_container.content.value)
+                    elif idx_container == 1:
                         if value_container.content.value == '':
                             col_table.append(None)
                         else:
@@ -3128,9 +3197,9 @@ def main(page: ft.Page):
                 elif idx_container == 1:
                     config_opt['criteria']['opt'] = col_table
                 elif idx_container == 2:
-                    config_opt['criteria']['<='] = col_table
-                elif idx_container == 3:
                     config_opt['criteria']['>='] = col_table
+                elif idx_container == 3:
+                    config_opt['criteria']['<='] = col_table
                 else:
                     config_opt['criteria']['weight'] = col_table
 
@@ -3547,16 +3616,12 @@ def main(page: ft.Page):
 
     def pareto_chart_generator(e):
         df_chart = pd.DataFrame(data=page.dump_opt_data)
-        print(page.dump_opt_data)
-        print(page.criteria_dict)
         df_chart = df_chart[[pareto_x_axis_dd.value, pareto_y_axis_dd.value]]
-        print(df_chart)
         fig, ax = plt.subplots(figsize=(9, 9))
         if len(page.criteria_names) > 2:
             df_chart.sort_values(axis=0, by=[pareto_x_axis_dd.value], inplace=True)
             df_chart.reset_index(drop=True, inplace=True)
             stat_df_chart = df_chart.copy()
-            print(df_chart)
             idx_list = []
             if page.criteria_dict[pareto_x_axis_dd.value] == 'maximize' and page.criteria_dict[pareto_y_axis_dd.value] == 'maximize':
                 crit_idx = df_chart.shape[0]-1

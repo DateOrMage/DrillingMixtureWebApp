@@ -101,6 +101,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\test_pwa.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\uploads\FlexPunch.csv">
           <value>
             <Attribute>

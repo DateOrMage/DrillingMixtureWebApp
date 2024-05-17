@@ -83,9 +83,16 @@ def get_linear_reg_score(df: pd.DataFrame, x_names: list, y_name: str) -> float:
 
 
 if __name__ == '__main__':
-    data = pd.read_excel('uploads/БАШ_НИПИ_новая_форма.xlsx', skiprows=0, sheet_name=0)
-    x = ['Пластовая нефть, %', 'Хлорид натрия NaCl, %', 'Ангидрит (CaSO4), %', 'Модельная пластовая вода (МПВ)']
-    y = 'Фильтрация API, мл/30 мин'  # 'Фильтрация API, мл/30 мин'
+    # data = pd.read_excel('uploads/БАШ_НИПИ_новая_форма.xlsx', skiprows=0, sheet_name=0)
+    # x = ['Пластовая нефть, %', 'Хлорид натрия NaCl, %', 'Ангидрит (CaSO4), %', 'Модельная пластовая вода (МПВ)']
+    # y = 'Фильтрация API, мл/30 мин'  # 'Фильтрация API, мл/30 мин'
     # y = data.columns[-8:].to_list()
-    res_model = get_linear_reg_score(data, x, y)
+    # res_model = get_linear_reg_score(data, x, y)
+    df = pd.read_excel("C:\\Users\\Aleksei\\Downloads\\Набор_данных_БашНИПИ_+СФУ+4столбца.xlsx", skiprows=2, sheet_name=0)
+    for j in range(df.shape[1]):
+        if j < 16:
+            df.iloc[:, j] = df.iloc[:, j].fillna(0)
+        else:
+            df.iloc[:, j] = df.iloc[:, j].fillna(df.iloc[:, j].median())
+
 
