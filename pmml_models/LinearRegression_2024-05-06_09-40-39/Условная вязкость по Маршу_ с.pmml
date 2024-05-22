@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.107.0"/>
+		<Timestamp>2024-05-06T06:40:40Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="y" optype="continuous" dataType="double"/>
+		<DataField name="x1" optype="continuous" dataType="double"/>
+		<DataField name="x2" optype="continuous" dataType="double"/>
+		<DataField name="x3" optype="continuous" dataType="double"/>
+		<DataField name="x4" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<RegressionModel functionName="regression" algorithmName="sklearn.linear_model._base.LinearRegression">
+		<MiningSchema>
+			<MiningField name="y" usageType="target"/>
+			<MiningField name="x1"/>
+			<MiningField name="x2"/>
+			<MiningField name="x3"/>
+			<MiningField name="x4"/>
+		</MiningSchema>
+		<RegressionTable intercept="74.40119238039841">
+			<NumericPredictor name="x1" coefficient="55.17701032426931"/>
+			<NumericPredictor name="x2" coefficient="4.149338374291133"/>
+			<NumericPredictor name="x3" coefficient="-5.993892685764147"/>
+			<NumericPredictor name="x4" coefficient="-39.62298967573068"/>
+		</RegressionTable>
+	</RegressionModel>
+</PMML>

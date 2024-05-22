@@ -1649,7 +1649,7 @@ def main(page: ft.Page):
                                                            text_size=15,
                                                            focused_border_color=ft.colors.BLUE_700,
                                                            cursor_color=ft.colors.BLUE_700,
-                                                           value='50',
+                                                           value='25',
                                                            scale=0.75,
                                                            width=150, ))
             model_options_field.visible = True
@@ -1781,9 +1781,15 @@ def main(page: ft.Page):
     page.plt_charts = None
     page.model_list = None
     page.model_metadata = None
+    page.pred_data = None  # for save modeling result in file
 
     def run_training(e):
         try:
+            save_pred_data_button.icon = ft.icons.SAVE_ALT_SHARP
+            save_pred_data_button.icon_color = ft.colors.ORANGE_500
+            save_pred_data_button.tooltip = None
+            save_pred_data_button.disabled = True
+            save_pred_data_button.update()
             save_model_button.icon = ft.icons.DATA_SAVER_ON
             save_model_button.icon_color = ft.colors.ORANGE_500
             save_model_button.tooltip = None
@@ -1819,16 +1825,18 @@ def main(page: ft.Page):
                 for feat in features_name_list:
                     model_metadata[feat] = {'min': float(page.df_to_view[feat].min()),
                                             'max': float(page.df_to_view[feat].max())}
-                print(model_metadata)
-
+                # print(model_metadata)
+                page.pred_data = page.df_to_view[features_name_list].copy()
                 for target_name in target_name_list:
                     model_data = {'target': target_name}
                     model_data['model'], model_data['metric'], model_data['predict'] = \
                         training_linear_model(page.df_to_view[features_name_list], page.df_to_view[target_name],
                                               model_type_dd.value, model_options_list)
                     models_list.append(model_data)
+                    page.pred_data[target_name] = model_data['predict']
 
-                print(models_list)
+                # print(page.pred_data)
+                # print(models_list)
                 page.model_list = models_list
                 page.model_metadata = model_metadata
                 # Generation and visible fields on optimization window
@@ -1842,6 +1850,7 @@ def main(page: ft.Page):
                 plt.close('all')
                 gc.collect()
                 for idx, model in enumerate(models_list):
+                    # print(f"{target_name_list[idx]}:\n{model['predict']}")
                     fig, ax = plt.subplots()
                     ax.scatter(range(len(model['predict'])), page.df_to_view[target_name_list[idx]].values, color='orange',
                                label='Исходные данные')
@@ -1851,6 +1860,8 @@ def main(page: ft.Page):
                     ax.legend()
                     plt_charts.append(MatplotlibChart(fig, transparent=False, original_size=False))
                 page.plt_charts = plt_charts
+                save_pred_data_button.disabled = False
+                save_pred_data_button.update()
                 save_model_button.disabled = False
                 save_model_button.update()
                 if model_type_dd.value != 'KernelRegression':
@@ -1916,6 +1927,64 @@ def main(page: ft.Page):
                                            icon=ft.icons.VISIBILITY,
                                            scale=0.85,
                                            on_click=open_charts_ml_predict_ad,
+                                           icon_color=ft.colors.ORANGE_500,
+                                           style=ft.ButtonStyle(bgcolor={
+                                               ft.MaterialState.DISABLED: ft.colors.GREY_900,
+                                           }),
+                                           disabled=True
+                                           )
+
+    # SAVE PRED DATA
+
+    def get_generated_pred_data_name(e):
+        current_date = str(datetime.date.today().isoformat())
+        current_time = str(datetime.datetime.now().time()).split('.')[0].replace(':', '-')
+        generated_model_dir_name = page.model_metadata['modelType'] + '_' + current_date + '_' + current_time
+        return generated_model_dir_name
+
+    def save_pred_data_processing(e):
+        if not os.path.exists(f'models_result'):
+            os.mkdir(f'models_result')
+
+        if save_pred_data_text_field.value.endswith('.xlsx'):
+            save_pred_data_text_field.value = save_pred_data_text_field.value[:-5]
+        page.pred_data.to_excel(os.path.join('models_result', save_pred_data_text_field.value + save_pred_data_text_field.suffix_text),
+                                 index=False)
+
+        dialog_save_pred_data.open = False
+        dialog_save_pred_data.update()
+        save_pred_data_button.icon = ft.icons.CHECK
+        save_pred_data_button.icon_color = ft.colors.GREEN_500
+        save_pred_data_button.tooltip = save_pred_data_text_field.value
+        save_pred_data_button.disabled = True
+        save_pred_data_button.update()
+
+    def open_dialog_save_pred_data(e):
+        save_pred_data_text_field.value = get_generated_pred_data_name(e)
+        page.dialog = dialog_save_pred_data
+        dialog_save_pred_data.open = True
+        page.update()
+
+    save_pred_data_text_field = ft.TextField(label='Имя файла', width=1000, height=70,
+                                             text_align=ft.alignment.center,
+                                             multiline=False,
+                                             suffix_text='.xlsx',
+                                             )
+
+    dialog_save_pred_data = ft.AlertDialog(
+        modal=False,
+        adaptive=True,
+        content=save_pred_data_text_field,
+        actions=[
+            ft.TextButton('Submit', on_click=save_pred_data_processing)
+        ],
+        actions_alignment=ft.MainAxisAlignment.CENTER,
+    )
+
+    save_pred_data_button = ft.ElevatedButton('Сохранить результаты',
+                                           icon=ft.icons.SAVE_ALT_SHARP,
+                                           scale=0.85,
+                                           on_click=open_dialog_save_pred_data,
                                            icon_color=ft.colors.ORANGE_500,
                                            style=ft.ButtonStyle(bgcolor={
                                                ft.MaterialState.DISABLED: ft.colors.GREY_900,
@@ -2534,6 +2603,7 @@ def main(page: ft.Page):
                         ft.Row(
                             [
                                 show_charts_button,
+                                save_pred_data_button,
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                         ),

@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.107.0"/>
+		<Timestamp>2024-05-06T06:36:08Z</Timestamp>
+	</Header>
+	<DataDictionary>
+		<DataField name="y" optype="continuous" dataType="double"/>
+		<DataField name="x1" optype="continuous" dataType="double"/>
+		<DataField name="x2" optype="continuous" dataType="double"/>
+		<DataField name="x3" optype="continuous" dataType="double"/>
+		<DataField name="x4" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<NeuralNetwork functionName="regression" algorithmName="sklearn.neural_network._multilayer_perceptron.MLPRegressor" activationFunction="rectifier">
+		<MiningSchema>
+			<MiningField name="y" usageType="target"/>
+			<MiningField name="x1"/>
+			<MiningField name="x2"/>
+			<MiningField name="x3"/>
+			<MiningField name="x4"/>
+		</MiningSchema>
+		<NeuralInputs>
+			<NeuralInput id="input/1">
+				<DerivedField optype="continuous" dataType="double">
+					<FieldRef field="x1"/>
+				</DerivedField>
+			</NeuralInput>
+			<NeuralInput id="input/2">
+				<DerivedField optype="continuous" dataType="double">
+					<FieldRef field="x2"/>
+				</DerivedField>
+			</NeuralInput>
+			<NeuralInput id="input/3">
+				<DerivedField optype="continuous" dataType="double">
+					<FieldRef field="x3"/>
+				</DerivedField>
+			</NeuralInput>
+			<NeuralInput id="input/4">
+				<DerivedField optype="continuous" dataType="double">
+					<FieldRef field="x4"/>
+				</DerivedField>
+			</NeuralInput>
+		</NeuralInputs>
+		<NeuralLayer>
+			<Neuron id="1/1" bias="0.8576545762516874">
+				<Con from="input/1" weight="0.17776232231210964"/>
+				<Con from="input/2" weight="-0.2525666843635836"/>
+				<Con from="input/3" weight="0.25564356753769507"/>
+				<Con from="input/4" weight="-1.6259920826921739"/>
+			</Neuron>
+			<Neuron id="1/2" bias="2.027080668843341">
+				<Con from="input/1" weight="0.2858463116557232"/>
+				<Con from="input/2" weight="0.20925625854756857"/>
+				<Con from="input/3" weight="0.4139930281767942"/>
+				<Con from="input/4" weight="-0.6636468765492276"/>
+			</Neuron>
+			<Neuron id="1/3" bias="-1.3117601723819516">
+				<Con from="input/1" weight="-0.2243905570999731"/>
+				<Con from="input/2" weight="-0.16489194463279266"/>
+				<Con from="input/3" weight="1.5554251940674038"/>
+				<Con from="input/4" weight="-0.2998636046320884"/>
+			</Neuron>
+			<Neuron id="1/4" bias="0.9270680320011474">
+				<Con from="input/1" weight="0.4080879549088661"/>
+				<Con from="input/2" weight="-0.2905155999899965"/>
+				<Con from="input/3" weight="0.46045955714720777"/>
+				<Con from="input/4" weight="-0.8821365709403964"/>
+			</Neuron>
+			<Neuron id="1/5" bias="2.2238421880160084">
+				<Con from="input/1" weight="0.2050473929230486"/>
+				<Con from="input/2" weight="0.15223897257167254"/>
+				<Con from="input/3" weight="0.8111297800983392"/>
+				<Con from="input/4" weight="-1.6896899838281647"/>
+			</Neuron>
+			<Neuron id="1/6" bias="1.1868235945780872">
+				<Con from="input/1" weight="0.294831543386721"/>
+				<Con from="input/2" weight="-0.2730451766313099"/>
+				<Con from="input/3" weight="0.6424866083035861"/>
+				<Con from="input/4" weight="-0.8305510295648301"/>
+			</Neuron>
+			<Neuron id="1/7" bias="-0.973110534026225">
+				<Con from="input/1" weight="-0.22576077187830088"/>
+				<Con from="input/2" weight="-0.014129875140260652"/>
+				<Con from="input/3" weight="-0.26158064756614724"/>
+				<Con from="input/4" weight="-0.3003477185088041"/>
+			</Neuron>
+			<Neuron id="1/8" bias="-1.603941790881258">
+				<Con from="input/1" weight="3.826695947192963"/>
+				<Con from="input/2" weight="-0.3465081494009697"/>
+				<Con from="input/3" weight="-1.2985404420262097"/>
+				<Con from="input/4" weight="-1.3314645777750207"/>
+			</Neuron>
+			<Neuron id="1/9" bias="-0.9227904873380496">
+				<Con from="input/1" weight="-0.16212741771867573"/>
+				<Con from="input/2" weight="0.048958485964031885"/>
+				<Con from="input/3" weight="-0.15741341990885746"/>
+				<Con from="input/4" weight="0.23542304967064842"/>
+			</Neuron>
+			<Neuron id="1/10" bias="0.9108281651708194">
+				<Con from="input/1" weight="0.6894860822122079"/>
+				<Con from="input/2" weight="-1.6156061441421061"/>
+				<Con from="input/3" weight="-0.1451864428839822"/>
+				<Con from="input/4" weight="-0.5101129286840322"/>
+			</Neuron>
+			<Neuron id="1/11" bias="-0.3538517584990202">
+				<Con from="input/1" weight="-0.2583852260314556"/>
+				<Con from="input/2" weight="-0.2977785971894325"/>
+				<Con from="input/3" weight="0.2561720151742837"/>
+				<Con from="input/4" weight="-0.004362107696582899"/>
+			</Neuron>
+			<Neuron id="1/12" bias="-0.1380182126360961">
+				<Con from="input/1" weight="0.044593457192477315"/>
+				<Con from="input/2" weight="0.03814030632742541"/>
+				<Con from="input/3" weight="-0.2887595379101408"/>
+				<Con from="input/4" weight="-0.2277190154374351"/>
+			</Neuron>
+			<Neuron id="1/13" bias="-0.23939713157002104">
+				<Con from="input/1" weight="-0.17559456062497844"/>
+				<Con from="input/2" weight="-0.5033445543715193"/>
+				<Con from="input/3" weight="0.009792364423860186"/>
+				<Con from="input/4" weight="-0.23955444830708383"/>
+			</Neuron>
+			<Neuron id="1/14" bias="0.250857622068325">
+				<Con from="input/1" weight="-1.72992176218713"/>
+				<Con from="input/2" weight="0.5748549300019604"/>
+				<Con from="input/3" weight="-0.8008658196021231"/>
+				<Con from="input/4" weight="-1.2836338072890627"/>
+			</Neuron>
+			<Neuron id="1/15" bias="-0.5757692183968544">
+				<Con from="input/1" weight="-0.40926253140207147"/>
+				<Con from="input/2" weight="-0.14729581357571972"/>
+				<Con from="input/3" weight="0.12841063184929077"/>
+				<Con from="input/4" weight="-0.1487593108261861"/>
+			</Neuron>
+			<Neuron id="1/16" bias="-0.4134534986069674">
+				<Con from="input/1" weight="0.35556802011725075"/>
+				<Con from="input/2" weight="-0.4146078752026915"/>
+				<Con from="input/3" weight="0.3884024364079873"/>
+				<Con from="input/4" weight="0.3576268328234405"/>
+			</Neuron>
+			<Neuron id="1/17" bias="-0.4412319856158901">
+				<Con from="input/1" weight="-0.3164287320961276"/>
+				<Con from="input/2" weight="-0.3851659757190324"/>
+				<Con from="input/3" weight="0.08232240019396994"/>
+				<Con from="input/4" weight="0.4313420515748124"/>
+			</Neuron>
+			<Neuron id="1/18" bias="-0.5296280291756251">
+				<Con from="input/1" weight="-0.2819635505916898"/>
+				<Con from="input/2" weight="-0.4695950787918701"/>
+				<Con from="input/3" weight="-0.2348262970016408"/>
+				<Con from="input/4" weight="-0.26156733432605384"/>
+			</Neuron>
+			<Neuron id="1/19" bias="-0.7105007893798891">
+				<Con from="input/1" weight="0.06809224737399701"/>
+				<Con from="input/2" weight="0.5664007798835761"/>
+				<Con from="input/3" weight="-0.31008992598969826"/>
+				<Con from="input/4" weight="-0.44168031256675183"/>
+			</Neuron>
+			<Neuron id="1/20" bias="0.5753639797467378">
+				<Con from="input/1" weight="-2.787527760819848"/>
+				<Con from="input/2" weight="-0.7018466748625415"/>
+				<Con from="input/3" weight="-2.981197156179412"/>
+				<Con from="input/4" weight="-3.2445907632224955"/>
+			</Neuron>
+			<Neuron id="1/21" bias="2.6954122718030815">
+				<Con from="input/1" weight="0.598168865981873"/>
+				<Con from="input/2" weight="-1.515456351516707"/>
+				<Con from="input/3" weight="0.7352577593245393"/>
+				<Con from="input/4" weight="-0.8993924424914398"/>
+			</Neuron>
+			<Neuron id="1/22" bias="1.5521212465691496">
+				<Con from="input/1" weight="-0.9952390812511666"/>
+				<Con from="input/2" weight="0.3253948610084184"/>
+				<Con from="input/3" weight="-0.2885888167008315"/>
+				<Con from="input/4" weight="-1.3010183828036836"/>
+			</Neuron>
+			<Neuron id="1/23" bias="-0.8722115403175729">
+				<Con from="input/1" weight="1.045654570045596"/>
+				<Con from="input/2" weight="0.3019968578821283"/>
+				<Con from="input/3" weight="-0.3220717202710707"/>
+				<Con from="input/4" weight="-0.3946280905836965"/>
+			</Neuron>
+			<Neuron id="1/24" bias="-0.3700910713875794">
+				<Con from="input/1" weight="0.09826382627741939"/>
+				<Con from="input/2" weight="-0.0452456735767148"/>
+				<Con from="input/3" weight="-0.2892019928483674"/>
+				<Con from="input/4" weight="0.30487345335845467"/>
+			</Neuron>
+			<Neuron id="1/25" bias="-1.5610271747489755">
+				<Con from="input/1" weight="0.8007116669250972"/>
+				<Con from="input/2" weight="2.856109590006771"/>
+				<Con from="input/3" weight="0.13026417138230917"/>
+				<Con from="input/4" weight="-1.3635884845270319"/>
+			</Neuron>
+		</NeuralLayer>
+		<NeuralLayer>
+			<Neuron id="2/1" bias="0.6318051857679724">
+				<Con from="1/1" weight="0.25366665213403294"/>
+				<Con from="1/2" weight="0.12420691224323527"/>
+				<Con from="1/3" weight="0.12438138088573626"/>
+				<Con from="1/4" weight="-0.06203956399997253"/>
+				<Con from="1/5" weight="0.43532025557155846"/>
+				<Con from="1/6" weight="0.2871542821197184"/>
+				<Con from="1/7" weight="0.046919587157331244"/>
+				<Con from="1/8" weight="0.8908092090358738"/>
+				<Con from="1/9" weight="-0.19365083827707746"/>
+				<Con from="1/10" weight="0.5015006952972584"/>
+				<Con from="1/11" weight="-0.23081542570213684"/>
+				<Con from="1/12" weight="-0.19585581419319592"/>
+				<Con from="1/13" weight="0.5233638412814439"/>
+				<Con from="1/14" weight="0.205491545421557"/>
+				<Con from="1/15" weight="0.4227331014660279"/>
+				<Con from="1/16" weight="0.08493306942111495"/>
+				<Con from="1/17" weight="-0.17115359936670846"/>
+				<Con from="1/18" weight="0.48913829771340595"/>
+				<Con from="1/19" weight="0.05633523474899468"/>
+				<Con from="1/20" weight="0.5042109698264472"/>
+				<Con from="1/21" weight="0.23044010202544118"/>
+				<Con from="1/22" weight="-0.08961402336750525"/>
+				<Con from="1/23" weight="0.4505270431139711"/>
+				<Con from="1/24" weight="0.19144742688453842"/>
+				<Con from="1/25" weight="0.7221610623085486"/>
+			</Neuron>
+			<Neuron id="2/2" bias="0.22113512525306744">
+				<Con from="1/1" weight="0.058185006163018964"/>
+				<Con from="1/2" weight="-0.2941437321422799"/>
+				<Con from="1/3" weight="-0.015500264358955539"/>
+				<Con from="1/4" weight="-0.19035728593529622"/>
+				<Con from="1/5" weight="-0.25000484350697283"/>
+				<Con from="1/6" weight="-0.0932838401370636"/>
+				<Con from="1/7" weight="0.1748756165183952"/>
+				<Con from="1/8" weight="-0.26271001484581574"/>
+				<Con from="1/9" weight="0.29749774773068866"/>
+				<Con from="1/10" weight="-0.2108588662479079"/>
+				<Con from="1/11" weight="0.2364097480715172"/>
+				<Con from="1/12" weight="0.12286561172974012"/>
+				<Con from="1/13" weight="-0.1367681278972696"/>
+				<Con from="1/14" weight="-0.18273293777845837"/>
+				<Con from="1/15" weight="-0.11444454200375098"/>
+				<Con from="1/16" weight="-0.3099942476427054"/>
+				<Con from="1/17" weight="0.29944557597075216"/>
+				<Con from="1/18" weight="-0.14150378296810243"/>
+				<Con from="1/19" weight="-0.03206820411506896"/>
+				<Con from="1/20" weight="-0.23566563292665757"/>
+				<Con from="1/21" weight="0.06483862070319081"/>
+				<Con from="1/22" weight="-0.11553948192835028"/>
+				<Con from="1/23" weight="-0.3247256518844099"/>
+				<Con from="1/24" weight="-0.11325810569122666"/>
+				<Con from="1/25" weight="-0.15971313891638897"/>
+			</Neuron>
+			<Neuron id="2/3" bias="-0.11685906068391842">
+				<Con from="1/1" weight="-0.14953199136734646"/>
+				<Con from="1/2" weight="0.08325116332055517"/>
+				<Con from="1/3" weight="0.30209498744056695"/>
+				<Con from="1/4" weight="-0.12354615304601421"/>
+				<Con from="1/5" weight="0.3417470840046299"/>
+				<Con from="1/6" weight="0.25975475970855544"/>
+				<Con from="1/7" weight="0.28705779849577057"/>
+				<Con from="1/8" weight="-0.2113378122204258"/>
+				<Con from="1/9" weight="0.11904086165183117"/>
+				<Con from="1/10" weight="-0.2493393663761738"/>
+				<Con from="1/11" weight="-0.2320142863031749"/>
+				<Con from="1/12" weight="-0.02978468068464747"/>
+				<Con from="1/13" weight="-0.04649025510809707"/>
+				<Con from="1/14" weight="-0.34579539143236954"/>
+				<Con from="1/15" weight="-0.272454344671946"/>
+				<Con from="1/16" weight="-0.28928056555388054"/>
+				<Con from="1/17" weight="-0.04729065673538783"/>
+				<Con from="1/18" weight="-0.18864579257347103"/>
+				<Con from="1/19" weight="0.18947896505691939"/>
+				<Con from="1/20" weight="-0.2115784871430733"/>
+				<Con from="1/21" weight="0.15878202539505182"/>
+				<Con from="1/22" weight="0.2891325171348575"/>
+				<Con from="1/23" weight="-0.05301006707796641"/>
+				<Con from="1/24" weight="0.18207883880790743"/>
+				<Con from="1/25" weight="0.10946196290753198"/>
+			</Neuron>
+			<Neuron id="2/4" bias="-1.3386267634145246">
+				<Con from="1/1" weight="-0.5433551626719797"/>
+				<Con from="1/2" weight="-0.7051125541762667"/>
+				<Con from="1/3" weight="-0.20568942016386496"/>
+				<Con from="1/4" weight="-0.6111018734022282"/>
+				<Con from="1/5" weight="-0.5792704500297648"/>
+				<Con from="1/6" weight="-0.3121826478787682"/>
+				<Con from="1/7" weight="-0.633258804973278"/>
+				<Con from="1/8" weight="-0.918056930432006"/>
+				<Con from="1/9" weight="0.09693378962916883"/>
+				<Con from="1/10" weight="-0.3805258012169156"/>
+				<Con from="1/11" weight="-0.31099038871100876"/>
+				<Con from="1/12" weight="-0.04319296936577269"/>
+				<Con from="1/13" weight="-0.7911088976239427"/>
+				<Con from="1/14" weight="-0.6228319956097715"/>
+				<Con from="1/15" weight="-0.2743750607082924"/>
+				<Con from="1/16" weight="-0.34762666168014444"/>
+				<Con from="1/17" weight="0.1369073936266133"/>
+				<Con from="1/18" weight="-0.16611224136903946"/>
+				<Con from="1/19" weight="-0.04104422953420994"/>
+				<Con from="1/20" weight="-0.22298123941354703"/>
+				<Con from="1/21" weight="-0.24206653206722153"/>
+				<Con from="1/22" weight="-0.4830565033316175"/>
+				<Con from="1/23" weight="-0.18600992382650194"/>
+				<Con from="1/24" weight="0.015351790642829285"/>
+				<Con from="1/25" weight="-0.022829240438312384"/>
+			</Neuron>
+			<Neuron id="2/5" bias="-0.13989194830307305">
+				<Con from="1/1" weight="0.28418216488573633"/>
+				<Con from="1/2" weight="-0.20269934091663566"/>
+				<Con from="1/3" weight="0.24040302602933122"/>
+				<Con from="1/4" weight="0.09816920390334417"/>
+				<Con from="1/5" weight="-0.2831332503978973"/>
+				<Con from="1/6" weight="0.07960515495193804"/>
+				<Con from="1/7" weight="-0.11215153821057733"/>
+				<Con from="1/8" weight="0.23246528154868742"/>
+				<Con from="1/9" weight="-0.2532816504646163"/>
+				<Con from="1/10" weight="0.06802943449746685"/>
+				<Con from="1/11" weight="-0.1970294895161028"/>
+				<Con from="1/12" weight="0.09637156357521948"/>
+				<Con from="1/13" weight="0.2018923240938753"/>
+				<Con from="1/14" weight="-0.1651872452235199"/>
+				<Con from="1/15" weight="-0.2861727691835126"/>
+				<Con from="1/16" weight="-0.21034000939005945"/>
+				<Con from="1/17" weight="-0.16871209919434765"/>
+				<Con from="1/18" weight="0.028128043094380762"/>
+				<Con from="1/19" weight="0.059025826298895114"/>
+				<Con from="1/20" weight="-0.15497772415940406"/>
+				<Con from="1/21" weight="-0.1380975131205549"/>
+				<Con from="1/22" weight="-0.008243555549211032"/>
+				<Con from="1/23" weight="-0.1636101909949432"/>
+				<Con from="1/24" weight="-0.23750201330288737"/>
+				<Con from="1/25" weight="0.3343303910232165"/>
+			</Neuron>
+			<Neuron id="2/6" bias="-1.441988891598378">
+				<Con from="1/1" weight="-0.40500224792749084"/>
+				<Con from="1/2" weight="-0.8872889200934801"/>
+				<Con from="1/3" weight="-0.29202129625405915"/>
+				<Con from="1/4" weight="-0.35184737322578924"/>
+				<Con from="1/5" weight="-0.8276412358500869"/>
+				<Con from="1/6" weight="-0.33413432549270816"/>
+				<Con from="1/7" weight="-0.8704309641509066"/>
+				<Con from="1/8" weight="-0.6420168488983796"/>
+				<Con from="1/9" weight="-0.0014389446501947014"/>
+				<Con from="1/10" weight="0.010911287712771245"/>
+				<Con from="1/11" weight="-0.2625743804650004"/>
+				<Con from="1/12" weight="0.26560850062276753"/>
+				<Con from="1/13" weight="-0.744724178818969"/>
+				<Con from="1/14" weight="-0.5571611810533156"/>
+				<Con from="1/15" weight="-0.6109960542212852"/>
+				<Con from="1/16" weight="0.08733912159537374"/>
+				<Con from="1/17" weight="0.31806794268311617"/>
+				<Con from="1/18" weight="-0.1662155753950769"/>
+				<Con from="1/19" weight="-0.32270766705846887"/>
+				<Con from="1/20" weight="-0.4594294562674403"/>
+				<Con from="1/21" weight="-0.5664441317274171"/>
+				<Con from="1/22" weight="-0.5330997253962556"/>
+				<Con from="1/23" weight="-0.1938342879741257"/>
+				<Con from="1/24" weight="-0.13456298242397538"/>
+				<Con from="1/25" weight="-0.16175352260782483"/>
+			</Neuron>
+			<Neuron id="2/7" bias="1.0263587291832013">
+				<Con from="1/1" weight="0.06577739213391207"/>
+				<Con from="1/2" weight="-0.1114416903233458"/>
+				<Con from="1/3" weight="-0.21422967713518065"/>
+				<Con from="1/4" weight="-0.2632051652524901"/>
+				<Con from="1/5" weight="-0.08541528961736729"/>
+				<Con from="1/6" weight="0.22018649525384287"/>
+				<Con from="1/7" weight="0.061746651759307"/>
+				<Con from="1/8" weight="0.8091411601915575"/>
+				<Con from="1/9" weight="0.16398646071024894"/>
+				<Con from="1/10" weight="0.36173475344160994"/>
+				<Con from="1/11" weight="-0.136986450586863"/>
+				<Con from="1/12" weight="-0.09552567563063001"/>
+				<Con from="1/13" weight="0.03444023610073826"/>
+				<Con from="1/14" weight="0.4467826545020765"/>
+				<Con from="1/15" weight="-0.041573702146467474"/>
+				<Con from="1/16" weight="-0.1953144736735598"/>
+				<Con from="1/17" weight="-0.16698614981537865"/>
+				<Con from="1/18" weight="-3.8729759742018075E-4"/>
+				<Con from="1/19" weight="0.39958410098746794"/>
+				<Con from="1/20" weight="0.8021452644446654"/>
+				<Con from="1/21" weight="0.18680196506868912"/>
+				<Con from="1/22" weight="0.3544296322573217"/>
+				<Con from="1/23" weight="0.4122935736285524"/>
+				<Con from="1/24" weight="0.03885033441043081"/>
+				<Con from="1/25" weight="0.3005716498664117"/>
+			</Neuron>
+			<Neuron id="2/8" bias="-0.188055160690646">
+				<Con from="1/1" weight="-0.31680554971849817"/>
+				<Con from="1/2" weight="-0.19312027047470343"/>
+				<Con from="1/3" weight="0.1984546350059561"/>
+				<Con from="1/4" weight="0.2023011846039251"/>
+				<Con from="1/5" weight="-0.2105905425550898"/>
+				<Con from="1/6" weight="0.06938516991394018"/>
+				<Con from="1/7" weight="0.0751850001734309"/>
+				<Con from="1/8" weight="-0.3567715065495703"/>
+				<Con from="1/9" weight="0.1338108286151415"/>
+				<Con from="1/10" weight="-0.1911307359820376"/>
+				<Con from="1/11" weight="-0.3407327785080048"/>
+				<Con from="1/12" weight="0.21911855533301855"/>
+				<Con from="1/13" weight="-0.40208927350108103"/>
+				<Con from="1/14" weight="-0.4055344357636377"/>
+				<Con from="1/15" weight="-0.059604907450221165"/>
+				<Con from="1/16" weight="0.18249947432588923"/>
+				<Con from="1/17" weight="0.33454506359860703"/>
+				<Con from="1/18" weight="-0.1398042155836422"/>
+				<Con from="1/19" weight="-0.04017671603723764"/>
+				<Con from="1/20" weight="-0.18031698771838933"/>
+				<Con from="1/21" weight="0.3015018728538123"/>
+				<Con from="1/22" weight="-0.006872473629739066"/>
+				<Con from="1/23" weight="-0.2684681465277648"/>
+				<Con from="1/24" weight="-0.20279464768877328"/>
+				<Con from="1/25" weight="-0.16004695534446686"/>
+			</Neuron>
+			<Neuron id="2/9" bias="0.2830776392041464">
+				<Con from="1/1" weight="-0.3260098199575214"/>
+				<Con from="1/2" weight="-0.3044238113875396"/>
+				<Con from="1/3" weight="0.2524322759362521"/>
+				<Con from="1/4" weight="-0.23966317665251366"/>
+				<Con from="1/5" weight="0.13471893513737812"/>
+				<Con from="1/6" weight="0.19049180448924594"/>
+				<Con from="1/7" weight="-0.24020627364246233"/>
+				<Con from="1/8" weight="0.18408436313200616"/>
+				<Con from="1/9" weight="0.22908954584003718"/>
+				<Con from="1/10" weight="-0.14272681069808857"/>
+				<Con from="1/11" weight="0.1121131925463384"/>
+				<Con from="1/12" weight="0.228974535467362"/>
+				<Con from="1/13" weight="-0.08987588373721302"/>
+				<Con from="1/14" weight="-0.19614071855615353"/>
+				<Con from="1/15" weight="-0.2079382580292852"/>
+				<Con from="1/16" weight="0.2048954516616341"/>
+				<Con from="1/17" weight="-0.1564659945177634"/>
+				<Con from="1/18" weight="-0.25536770961399263"/>
+				<Con from="1/19" weight="-0.3224234039326228"/>
+				<Con from="1/20" weight="0.0986152707053917"/>
+				<Con from="1/21" weight="-0.34366220827898103"/>
+				<Con from="1/22" weight="-0.0933374794474348"/>
+				<Con from="1/23" weight="-0.2037839987705472"/>
+				<Con from="1/24" weight="0.3047043230377494"/>
+				<Con from="1/25" weight="0.07630818215429272"/>
+			</Neuron>
+			<Neuron id="2/10" bias="-1.4435307395605956">
+				<Con from="1/1" weight="-0.5161143010259823"/>
+				<Con from="1/2" weight="-1.0414700582137817"/>
+				<Con from="1/3" weight="-0.19618425431051328"/>
+				<Con from="1/4" weight="-0.18392917131768804"/>
+				<Con from="1/5" weight="-0.9697616342569172"/>
+				<Con from="1/6" weight="-0.3987891752561373"/>
+				<Con from="1/7" weight="-0.475716893290866"/>
+				<Con from="1/8" weight="-0.7701859525469859"/>
+				<Con from="1/9" weight="-0.2536174062049199"/>
+				<Con from="1/10" weight="-0.11290807634142203"/>
+				<Con from="1/11" weight="0.21783849584142256"/>
+				<Con from="1/12" weight="0.054836831148205506"/>
+				<Con from="1/13" weight="-0.43127300166861915"/>
+				<Con from="1/14" weight="-0.3244147010516135"/>
+				<Con from="1/15" weight="-0.37861215226289685"/>
+				<Con from="1/16" weight="-0.06175753539745856"/>
+				<Con from="1/17" weight="0.27869077872294734"/>
+				<Con from="1/18" weight="-0.5546234909288855"/>
+				<Con from="1/19" weight="-0.3662475953899097"/>
+				<Con from="1/20" weight="-0.5594851878326488"/>
+				<Con from="1/21" weight="-0.6911655332546438"/>
+				<Con from="1/22" weight="-0.6174076429092159"/>
+				<Con from="1/23" weight="0.054473721920936455"/>
+				<Con from="1/24" weight="0.2006575972733676"/>
+				<Con from="1/25" weight="-0.42405754083927494"/>
+			</Neuron>
+			<Neuron id="2/11" bias="-0.9229650802140578">
+				<Con from="1/1" weight="-0.28531442267839674"/>
+				<Con from="1/2" weight="-0.48893212578163897"/>
+				<Con from="1/3" weight="-0.3105476408026737"/>
+				<Con from="1/4" weight="-0.17506343322724122"/>
+				<Con from="1/5" weight="-0.6882593727073424"/>
+				<Con from="1/6" weight="-0.360842078098875"/>
+				<Con from="1/7" weight="-0.09706293543516738"/>
+				<Con from="1/8" weight="-0.6194174473930285"/>
+				<Con from="1/9" weight="0.04291675505790727"/>
+				<Con from="1/10" weight="-0.3871194813551468"/>
+				<Con from="1/11" weight="-0.2594177304672445"/>
+				<Con from="1/12" weight="0.03183832093382543"/>
+				<Con from="1/13" weight="-0.3762024978823183"/>
+				<Con from="1/14" weight="-0.29199016333714134"/>
+				<Con from="1/15" weight="-0.3018485565828875"/>
+				<Con from="1/16" weight="-0.16075100847805646"/>
+				<Con from="1/17" weight="-0.03121548198066266"/>
+				<Con from="1/18" weight="-0.494196391384616"/>
+				<Con from="1/19" weight="-0.35681106262810436"/>
+				<Con from="1/20" weight="-0.28593408211865445"/>
+				<Con from="1/21" weight="0.0703655258550561"/>
+				<Con from="1/22" weight="-0.11334424139607296"/>
+				<Con from="1/23" weight="0.11754302749689537"/>
+				<Con from="1/24" weight="0.29887298122235384"/>
+				<Con from="1/25" weight="0.05902982571354024"/>
+			</Neuron>
+			<Neuron id="2/12" bias="-0.17079930788159936">
+				<Con from="1/1" weight="-0.2612194110311416"/>
+				<Con from="1/2" weight="-0.37522620363499115"/>
+				<Con from="1/3" weight="0.21742372094457865"/>
+				<Con from="1/4" weight="-0.20692165782255878"/>
+				<Con from="1/5" weight="0.0440340552422776"/>
+				<Con from="1/6" weight="-0.20191724548809506"/>
+				<Con from="1/7" weight="-0.3614268772004175"/>
+				<Con from="1/8" weight="0.08987735345528935"/>
+				<Con from="1/9" weight="-0.059969935667146826"/>
+				<Con from="1/10" weight="0.001853004993897944"/>
+				<Con from="1/11" weight="-0.2004463776407514"/>
+				<Con from="1/12" weight="-0.2758400489871626"/>
+				<Con from="1/13" weight="0.005921694089194489"/>
+				<Con from="1/14" weight="-0.2533491054847816"/>
+				<Con from="1/15" weight="-0.014009830343254596"/>
+				<Con from="1/16" weight="0.16904785755900317"/>
+				<Con from="1/17" weight="-0.18166931110409648"/>
+				<Con from="1/18" weight="0.18780210451424628"/>
+				<Con from="1/19" weight="-0.0335932541797045"/>
+				<Con from="1/20" weight="-0.23005490837969483"/>
+				<Con from="1/21" weight="-0.1367246419647254"/>
+				<Con from="1/22" weight="-0.02927601035541484"/>
+				<Con from="1/23" weight="-0.018381665199872308"/>
+				<Con from="1/24" weight="-0.33843653344861346"/>
+				<Con from="1/25" weight="0.2107459720182602"/>
+			</Neuron>
+			<Neuron id="2/13" bias="-0.004080327006656973">
+				<Con from="1/1" weight="-0.45457765346181866"/>
+				<Con from="1/2" weight="-0.16251231731385998"/>
+				<Con from="1/3" weight="-0.24837352045335626"/>
+				<Con from="1/4" weight="-0.09201521017721599"/>
+				<Con from="1/5" weight="-0.3308262160731741"/>
+				<Con from="1/6" weight="-0.32640529042263416"/>
+				<Con from="1/7" weight="-0.057490878864526"/>
+				<Con from="1/8" weight="0.10204477774017964"/>
+				<Con from="1/9" weight="-0.027636165967857656"/>
+				<Con from="1/10" weight="0.18183160030251147"/>
+				<Con from="1/11" weight="0.22955305199927628"/>
+				<Con from="1/12" weight="-0.0322576689769593"/>
+				<Con from="1/13" weight="-0.1649344941284917"/>
+				<Con from="1/14" weight="-0.27268456571772365"/>
+				<Con from="1/15" weight="-0.07038033655833328"/>
+				<Con from="1/16" weight="0.05220924703716606"/>
+				<Con from="1/17" weight="-0.26497306434666645"/>
+				<Con from="1/18" weight="0.24625985393337763"/>
+				<Con from="1/19" weight="-0.15185326427483"/>
+				<Con from="1/20" weight="-0.06369198810513824"/>
+				<Con from="1/21" weight="0.19624624008682212"/>
+				<Con from="1/22" weight="0.20737522731609215"/>
+				<Con from="1/23" weight="-0.07284973515853742"/>
+				<Con from="1/24" weight="-0.1048927349349654"/>
+				<Con from="1/25" weight="0.08059641036428304"/>
+			</Neuron>
+			<Neuron id="2/14" bias="-1.9690470199070789">
+				<Con from="1/1" weight="-0.38137055027816175"/>
+				<Con from="1/2" weight="-0.6836417825705449"/>
+				<Con from="1/3" weight="-0.3047704529004224"/>
+				<Con from="1/4" weight="-0.7744200870615994"/>
+				<Con from="1/5" weight="-1.1429167688755588"/>
+				<Con from="1/6" weight="-0.41345853469696797"/>
+				<Con from="1/7" weight="-0.5500804097596049"/>
+				<Con from="1/8" weight="-0.6338627929545884"/>
+				<Con from="1/9" weight="-0.2204692591065209"/>
+				<Con from="1/10" weight="-0.15190442303986418"/>
+				<Con from="1/11" weight="-0.14701133944050812"/>
+				<Con from="1/12" weight="0.22064383238152482"/>
+				<Con from="1/13" weight="-0.7527170401213171"/>
+				<Con from="1/14" weight="-0.40763463656271737"/>
+				<Con from="1/15" weight="-0.49582357592637094"/>
+				<Con from="1/16" weight="-0.14109654011751369"/>
+				<Con from="1/17" weight="0.09131499541651075"/>
+				<Con from="1/18" weight="-0.48432566096249324"/>
+				<Con from="1/19" weight="-0.3146565479647529"/>
+				<Con from="1/20" weight="-0.5134979548501786"/>
+				<Con from="1/21" weight="-0.26915549870278027"/>
+				<Con from="1/22" weight="-0.44576529349609073"/>
+				<Con from="1/23" weight="-0.10150267255352953"/>
+				<Con from="1/24" weight="-0.3154885694890797"/>
+				<Con from="1/25" weight="-0.06199805825955583"/>
+			</Neuron>
+			<Neuron id="2/15" bias="-0.19035726273358838">
+				<Con from="1/1" weight="0.03914496527490828"/>
+				<Con from="1/2" weight="0.2007888389805009"/>
+				<Con from="1/3" weight="-0.05195060329136625"/>
+				<Con from="1/4" weight="-0.04232163193014866"/>
+				<Con from="1/5" weight="-0.08847305061013926"/>
+				<Con from="1/6" weight="0.12284244918959426"/>
+				<Con from="1/7" weight="-0.11906870922982488"/>
+				<Con from="1/8" weight="-0.07742840214294262"/>
+				<Con from="1/9" weight="-0.35833984278589975"/>
+				<Con from="1/10" weight="-0.05570035246905331"/>
+				<Con from="1/11" weight="-0.0034951455172921165"/>
+				<Con from="1/12" weight="-0.028992783842799488"/>
+				<Con from="1/13" weight="0.153220246189058"/>
+				<Con from="1/14" weight="0.30645283780530874"/>
+				<Con from="1/15" weight="-0.1920909399534617"/>
+				<Con from="1/16" weight="-0.2828054970518803"/>
+				<Con from="1/17" weight="-0.22254126807851363"/>
+				<Con from="1/18" weight="-0.0020915501021436206"/>
+				<Con from="1/19" weight="-0.08128346600828555"/>
+				<Con from="1/20" weight="-0.04803015941847031"/>
+				<Con from="1/21" weight="-0.23794246597431962"/>
+				<Con from="1/22" weight="-0.2923410072287975"/>
+				<Con from="1/23" weight="-0.2834399010041551"/>
+				<Con from="1/24" weight="0.09817003526166741"/>
+				<Con from="1/25" weight="-0.30487884225364553"/>
+			</Neuron>
+			<Neuron id="2/16" bias="-0.32228379536065344">
+				<Con from="1/1" weight="-0.10526017851702163"/>
+				<Con from="1/2" weight="0.008384234808392716"/>
+				<Con from="1/3" weight="-0.32732005435180994"/>
+				<Con from="1/4" weight="-0.010952925595395189"/>
+				<Con from="1/5" weight="-0.2051312288104961"/>
+				<Con from="1/6" weight="0.029675961201459346"/>
+				<Con from="1/7" weight="0.34027662492398913"/>
+				<Con from="1/8" weight="-0.27018373954626435"/>
+				<Con from="1/9" weight="-0.12415636480168118"/>
+				<Con from="1/10" weight="0.12478215064208607"/>
+				<Con from="1/11" weight="-0.2791985355688416"/>
+				<Con from="1/12" weight="0.1927168830505164"/>
+				<Con from="1/13" weight="-0.29014311323290376"/>
+				<Con from="1/14" weight="0.15045210667990713"/>
+				<Con from="1/15" weight="0.3227693071824073"/>
+				<Con from="1/16" weight="-0.30262137869479105"/>
+				<Con from="1/17" weight="0.3248576165809073"/>
+				<Con from="1/18" weight="0.02113190069850747"/>
+				<Con from="1/19" weight="-0.29622157678878686"/>
+				<Con from="1/20" weight="0.2644717159382042"/>
+				<Con from="1/21" weight="0.11281027867891286"/>
+				<Con from="1/22" weight="0.09321526412936292"/>
+				<Con from="1/23" weight="0.09652548003218475"/>
+				<Con from="1/24" weight="-0.19207485705169053"/>
+				<Con from="1/25" weight="-0.03294626458547669"/>
+			</Neuron>
+			<Neuron id="2/17" bias="0.7994434882592784">
+				<Con from="1/1" weight="0.067802289179871"/>
+				<Con from="1/2" weight="-0.6854505320327853"/>
+				<Con from="1/3" weight="-0.07994545589205618"/>
+				<Con from="1/4" weight="-0.1524498075008547"/>
+				<Con from="1/5" weight="-0.2138802566136998"/>
+				<Con from="1/6" weight="-0.18093685188386038"/>
+				<Con from="1/7" weight="-0.1196578812731738"/>
+				<Con from="1/8" weight="0.5782290551448613"/>
+				<Con from="1/9" weight="-0.023167062102358416"/>
+				<Con from="1/10" weight="0.047319461044667145"/>
+				<Con from="1/11" weight="0.16259647451667938"/>
+				<Con from="1/12" weight="-0.343091879740562"/>
+				<Con from="1/13" weight="0.4291077574191898"/>
+				<Con from="1/14" weight="0.037989292011341595"/>
+				<Con from="1/15" weight="0.24031768685440175"/>
+				<Con from="1/16" weight="-0.1075327221596774"/>
+				<Con from="1/17" weight="0.1752164454444092"/>
+				<Con from="1/18" weight="0.32348299257396207"/>
+				<Con from="1/19" weight="0.27741743246279826"/>
+				<Con from="1/20" weight="0.1922372507810143"/>
+				<Con from="1/21" weight="-0.09435177588688003"/>
+				<Con from="1/22" weight="-0.036947058405845466"/>
+				<Con from="1/23" weight="0.24873162472115157"/>
+				<Con from="1/24" weight="0.07145337402606901"/>
+				<Con from="1/25" weight="0.5706524037691755"/>
+			</Neuron>
+			<Neuron id="2/18" bias="-0.20897352858062695">
+				<Con from="1/1" weight="-0.009598017813023434"/>
+				<Con from="1/2" weight="-0.3166732208748441"/>
+				<Con from="1/3" weight="-0.34199557429783733"/>
+				<Con from="1/4" weight="-0.37300863204684626"/>
+				<Con from="1/5" weight="0.1244903643885772"/>
+				<Con from="1/6" weight="-0.030516623710288127"/>
+				<Con from="1/7" weight="-0.22083222105200043"/>
+				<Con from="1/8" weight="-0.34783365762101226"/>
+				<Con from="1/9" weight="-0.2952163677360186"/>
+				<Con from="1/10" weight="0.09168197298682872"/>
+				<Con from="1/11" weight="0.2649194020377324"/>
+				<Con from="1/12" weight="-0.22212871136343032"/>
+				<Con from="1/13" weight="0.1820728994805125"/>
+				<Con from="1/14" weight="-0.021138614539168883"/>
+				<Con from="1/15" weight="-0.10167413788742544"/>
+				<Con from="1/16" weight="0.01726625637004386"/>
+				<Con from="1/17" weight="-0.1954154456870857"/>
+				<Con from="1/18" weight="0.09317838592293665"/>
+				<Con from="1/19" weight="0.17668799912070235"/>
+				<Con from="1/20" weight="-0.3502929579513122"/>
+				<Con from="1/21" weight="0.1495090254772363"/>
+				<Con from="1/22" weight="0.19171298368643896"/>
+				<Con from="1/23" weight="0.0422246109698404"/>
+				<Con from="1/24" weight="0.14578532898537047"/>
+				<Con from="1/25" weight="0.09983995773578064"/>
+			</Neuron>
+			<Neuron id="2/19" bias="0.18960219155602534">
+				<Con from="1/1" weight="-0.30277301350226504"/>
+				<Con from="1/2" weight="-0.18897443847865128"/>
+				<Con from="1/3" weight="-0.058873686830895604"/>
+				<Con from="1/4" weight="0.30806581917206916"/>
+				<Con from="1/5" weight="-0.09795852913787569"/>
+				<Con from="1/6" weight="-0.13343493702573017"/>
+				<Con from="1/7" weight="-0.03153294159919376"/>
+				<Con from="1/8" weight="-0.17830906651378423"/>
+				<Con from="1/9" weight="-0.17775846927214048"/>
+				<Con from="1/10" weight="0.29949970985544494"/>
+				<Con from="1/11" weight="-0.10123075463517568"/>
+				<Con from="1/12" weight="0.31658047520458066"/>
+				<Con from="1/13" weight="-0.2986069472905026"/>
+				<Con from="1/14" weight="0.2290769093541721"/>
+				<Con from="1/15" weight="-0.057085919659088706"/>
+				<Con from="1/16" weight="-0.08148641120158234"/>
+				<Con from="1/17" weight="0.21897840217084566"/>
+				<Con from="1/18" weight="0.08257746701637274"/>
+				<Con from="1/19" weight="-0.2505979497692796"/>
+				<Con from="1/20" weight="-0.16169513993784718"/>
+				<Con from="1/21" weight="-0.005612310944599909"/>
+				<Con from="1/22" weight="-0.08602733921231634"/>
+				<Con from="1/23" weight="-0.32346330768227904"/>
+				<Con from="1/24" weight="-0.09033874929667966"/>
+				<Con from="1/25" weight="-0.27096326353056754"/>
+			</Neuron>
+			<Neuron id="2/20" bias="3.1635973106926207">
+				<Con from="1/1" weight="0.5188611339258681"/>
+				<Con from="1/2" weight="-0.35718458275453874"/>
+				<Con from="1/3" weight="0.6110034194936274"/>
+				<Con from="1/4" weight="0.2783807742790875"/>
+				<Con from="1/5" weight="0.1664094138128169"/>
+				<Con from="1/6" weight="0.764544956584223"/>
+				<Con from="1/7" weight="0.9728189115903146"/>
+				<Con from="1/8" weight="3.933709229709241"/>
+				<Con from="1/9" weight="0.15440714510468642"/>
+				<Con from="1/10" weight="1.3735572684850086"/>
+				<Con from="1/11" weight="-0.15926076592536997"/>
+				<Con from="1/12" weight="0.09256834505101207"/>
+				<Con from="1/13" weight="1.4099774818076611"/>
+				<Con from="1/14" weight="1.069316879667807"/>
+				<Con from="1/15" weight="1.0970545230741233"/>
+				<Con from="1/16" weight="-0.5517385008867548"/>
+				<Con from="1/17" weight="-0.214528379485961"/>
+				<Con from="1/18" weight="0.522481311750774"/>
+				<Con from="1/19" weight="0.3042410594160409"/>
+				<Con from="1/20" weight="3.0967899412247766"/>
+				<Con from="1/21" weight="1.0796319405549946"/>
+				<Con from="1/22" weight="-0.9485885511532166"/>
+				<Con from="1/23" weight="0.631358675936082"/>
+				<Con from="1/24" weight="-0.29161537508561913"/>
+				<Con from="1/25" weight="2.855238196442573"/>
+			</Neuron>
+			<Neuron id="2/21" bias="0.6909406244045936">
+				<Con from="1/1" weight="-0.06989242053500876"/>
+				<Con from="1/2" weight="0.5144028064315331"/>
+				<Con from="1/3" weight="-0.13725408752039372"/>
+				<Con from="1/4" weight="0.2705687645399388"/>
+				<Con from="1/5" weight="0.6315978431459001"/>
+				<Con from="1/6" weight="0.2316669681576033"/>
+				<Con from="1/7" weight="0.43148647327061584"/>
+				<Con from="1/8" weight="0.1467558493976999"/>
+				<Con from="1/9" weight="0.4948369056132367"/>
+				<Con from="1/10" weight="0.19827738559673178"/>
+				<Con from="1/11" weight="0.2932563945296536"/>
+				<Con from="1/12" weight="-0.3189896884685966"/>
+				<Con from="1/13" weight="0.02353367495025539"/>
+				<Con from="1/14" weight="0.6181989263708404"/>
+				<Con from="1/15" weight="0.2880284419855511"/>
+				<Con from="1/16" weight="-0.20716600336003357"/>
+				<Con from="1/17" weight="-0.24255185673256055"/>
+				<Con from="1/18" weight="-0.21148962011285194"/>
+				<Con from="1/19" weight="0.1038012556453671"/>
+				<Con from="1/20" weight="-0.12780873149436614"/>
+				<Con from="1/21" weight="-0.004340043317916798"/>
+				<Con from="1/22" weight="-0.1621447899429548"/>
+				<Con from="1/23" weight="0.10066351200778886"/>
+				<Con from="1/24" weight="-0.03162083236221296"/>
+				<Con from="1/25" weight="0.46054100714378926"/>
+			</Neuron>
+			<Neuron id="2/22" bias="-0.26388512311425505">
+				<Con from="1/1" weight="-0.2011602758053804"/>
+				<Con from="1/2" weight="-0.28137972335253486"/>
+				<Con from="1/3" weight="-0.2788932699636882"/>
+				<Con from="1/4" weight="-0.017464516085516968"/>
+				<Con from="1/5" weight="-0.4183553052644192"/>
+				<Con from="1/6" weight="0.03568484329205563"/>
+				<Con from="1/7" weight="0.09054167248730975"/>
+				<Con from="1/8" weight="0.14072249437645754"/>
+				<Con from="1/9" weight="-0.26243942348367527"/>
+				<Con from="1/10" weight="-0.14606629945333788"/>
+				<Con from="1/11" weight="-0.07635126665624414"/>
+				<Con from="1/12" weight="-0.12018439941846867"/>
+				<Con from="1/13" weight="-0.3538865674471197"/>
+				<Con from="1/14" weight="-0.5412389526242124"/>
+				<Con from="1/15" weight="-0.22107200866706692"/>
+				<Con from="1/16" weight="0.2460832223511154"/>
+				<Con from="1/17" weight="-0.2239883098586376"/>
+				<Con from="1/18" weight="-0.3423093736586799"/>
+				<Con from="1/19" weight="0.029276154677146227"/>
+				<Con from="1/20" weight="0.1397142702990316"/>
+				<Con from="1/21" weight="0.171483763879952"/>
+				<Con from="1/22" weight="-0.3025701118069318"/>
+				<Con from="1/23" weight="-0.2721701718569214"/>
+				<Con from="1/24" weight="0.13629288939904502"/>
+				<Con from="1/25" weight="0.01319264490451311"/>
+			</Neuron>
+			<Neuron id="2/23" bias="-1.838917491525086">
+				<Con from="1/1" weight="-0.2897211843270462"/>
+				<Con from="1/2" weight="-0.44203063849567353"/>
+				<Con from="1/3" weight="0.03837194490170493"/>
+				<Con from="1/4" weight="-0.5160676264270466"/>
+				<Con from="1/5" weight="-0.9508719765769225"/>
+				<Con from="1/6" weight="-0.8457013419492598"/>
+				<Con from="1/7" weight="-0.780456374735774"/>
+				<Con from="1/8" weight="-0.4998047162058577"/>
+				<Con from="1/9" weight="-0.22880332746789636"/>
+				<Con from="1/10" weight="0.11020998771310508"/>
+				<Con from="1/11" weight="0.0869557278151476"/>
+				<Con from="1/12" weight="-0.022229453331359037"/>
+				<Con from="1/13" weight="-0.6094469161054473"/>
+				<Con from="1/14" weight="-0.6238920324241888"/>
+				<Con from="1/15" weight="-0.4423189624982692"/>
+				<Con from="1/16" weight="-0.26200819512218165"/>
+				<Con from="1/17" weight="0.23196385417678483"/>
+				<Con from="1/18" weight="-0.42218736816360675"/>
+				<Con from="1/19" weight="-0.16864620677044523"/>
+				<Con from="1/20" weight="-0.6987098496605512"/>
+				<Con from="1/21" weight="-0.2726953757660494"/>
+				<Con from="1/22" weight="-0.7370446053516411"/>
+				<Con from="1/23" weight="0.14857328485196988"/>
+				<Con from="1/24" weight="0.21662064556510474"/>
+				<Con from="1/25" weight="-0.05823552798495067"/>
+			</Neuron>
+			<Neuron id="2/24" bias="-0.1202695761688597">
+				<Con from="1/1" weight="0.03979027173276919"/>
+				<Con from="1/2" weight="-0.17720106100951763"/>
+				<Con from="1/3" weight="-0.209635726147545"/>
+				<Con from="1/4" weight="-5.573877833306448E-4"/>
+				<Con from="1/5" weight="0.04058968456817689"/>
+				<Con from="1/6" weight="-0.34213819780026966"/>
+				<Con from="1/7" weight="0.29327807716894605"/>
+				<Con from="1/8" weight="-0.003231397459242759"/>
+				<Con from="1/9" weight="0.3392706871627663"/>
+				<Con from="1/10" weight="0.020543389386248532"/>
+				<Con from="1/11" weight="-0.2846029705837167"/>
+				<Con from="1/12" weight="-0.06286266848273685"/>
+				<Con from="1/13" weight="-0.33897393120631153"/>
+				<Con from="1/14" weight="-0.31928361295858937"/>
+				<Con from="1/15" weight="0.21670054424252416"/>
+				<Con from="1/16" weight="-0.18421153792827052"/>
+				<Con from="1/17" weight="-0.06356122601348674"/>
+				<Con from="1/18" weight="-0.11497038496621258"/>
+				<Con from="1/19" weight="0.2639339162195496"/>
+				<Con from="1/20" weight="-0.053629177500558366"/>
+				<Con from="1/21" weight="-0.05728477081020891"/>
+				<Con from="1/22" weight="0.06724459308234795"/>
+				<Con from="1/23" weight="-0.29989401096903884"/>
+				<Con from="1/24" weight="0.34411392482150194"/>
+				<Con from="1/25" weight="-0.10481623077594278"/>
+			</Neuron>
+			<Neuron id="2/25" bias="-1.6520214934688988">
+				<Con from="1/1" weight="-0.31246020975627115"/>
+				<Con from="1/2" weight="-0.9318910021647409"/>
+				<Con from="1/3" weight="-0.16523850210511054"/>
+				<Con from="1/4" weight="-0.34645177587979353"/>
+				<Con from="1/5" weight="-1.0904206083442305"/>
+				<Con from="1/6" weight="-0.6343666818594865"/>
+				<Con from="1/7" weight="-0.7975965945594831"/>
+				<Con from="1/8" weight="-0.6106834066217278"/>
+				<Con from="1/9" weight="0.18876247761094328"/>
+				<Con from="1/10" weight="0.11295372845619313"/>
+				<Con from="1/11" weight="0.0930689206474885"/>
+				<Con from="1/12" weight="0.04227905841033923"/>
+				<Con from="1/13" weight="-0.6236012166936218"/>
+				<Con from="1/14" weight="-0.8837442840751203"/>
+				<Con from="1/15" weight="-0.29875133651728536"/>
+				<Con from="1/16" weight="0.25919087332424595"/>
+				<Con from="1/17" weight="-0.05194638095081704"/>
+				<Con from="1/18" weight="-0.4595855494190695"/>
+				<Con from="1/19" weight="-0.44040704629835215"/>
+				<Con from="1/20" weight="-0.7108451130726062"/>
+				<Con from="1/21" weight="-0.6832473966652388"/>
+				<Con from="1/22" weight="-0.8041345824636139"/>
+				<Con from="1/23" weight="-0.2438549433206452"/>
+				<Con from="1/24" weight="0.32282014001388304"/>
+				<Con from="1/25" weight="-0.11970212345414347"/>
+			</Neuron>
+		</NeuralLayer>
+		<NeuralLayer activationFunction="identity">
+			<Neuron id="3/1" bias="9.901812206187806">
+				<Con from="2/1" weight="1.0881566514303842"/>
+				<Con from="2/2" weight="-0.3093093780792336"/>
+				<Con from="2/3" weight="-0.10887322921788682"/>
+				<Con from="2/4" weight="1.375370606992089"/>
+				<Con from="2/5" weight="0.3200067554192554"/>
+				<Con from="2/6" weight="1.464779581230865"/>
+				<Con from="2/7" weight="0.8807690383443266"/>
+				<Con from="2/8" weight="-0.1159918555046173"/>
+				<Con from="2/9" weight="-0.42139680060119766"/>
+				<Con from="2/10" weight="1.9069306852156551"/>
+				<Con from="2/11" weight="0.3780011982776187"/>
+				<Con from="2/12" weight="-0.020431827141012188"/>
+				<Con from="2/13" weight="2.920414298847291"/>
+				<Con from="2/14" weight="0.6293606638199318"/>
+				<Con from="2/15" weight="-0.12119759338359043"/>
+				<Con from="2/16" weight="-0.08911787029798718"/>
+				<Con from="2/17" weight="1.5987639598725103"/>
+				<Con from="2/18" weight="0.3269692695434855"/>
+				<Con from="2/19" weight="0.13441696765648972"/>
+				<Con from="2/20" weight="6.887060961823461"/>
+				<Con from="2/21" weight="0.25609452602847566"/>
+				<Con from="2/22" weight="-0.20106046297953845"/>
+				<Con from="2/23" weight="0.635604180719754"/>
+				<Con from="2/24" weight="-0.20824419904523542"/>
+				<Con from="2/25" weight="0.09807986769765012"/>
+			</Neuron>
+		</NeuralLayer>
+		<NeuralOutputs>
+			<NeuralOutput outputNeuron="3/1">
+				<DerivedField optype="continuous" dataType="double">
+					<FieldRef field="y"/>
+				</DerivedField>
+			</NeuralOutput>
+		</NeuralOutputs>
+	</NeuralNetwork>
+</PMML>
