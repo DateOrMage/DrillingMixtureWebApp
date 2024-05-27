@@ -240,7 +240,7 @@ def main(page: ft.Page):
         page.update()
 
     def pdf_instruction_click(e):
-        pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v1.pdf')
+        pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v2.pdf')
         webbrowser.open_new(pdf_abs_path)
 
     def run_exe_calc(e):

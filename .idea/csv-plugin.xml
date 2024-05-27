@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="C:\Users\Aleksei\Downloads\main.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\assets\uploads\FlexPunch.csv">
           <value>
             <Attribute>
@@ -95,6 +102,13 @@
           </value>
         </entry>
         <entry key="\study_df.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\test_img.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
