@@ -103,7 +103,16 @@ def training_linear_model(X, y, model_name: str, model_options: list):
     elif model_name == 'ARDRegression':
         model = ARDRegression(compute_score=False)
     elif model_name == 'MLPRegression':
-        model = MLPRegressor((int(float(model_options[0])), int(float(model_options[0]))), solver='lbfgs', random_state=19, max_iter=10000)
+        if (int(float(model_options[1])))==1:
+            model = MLPRegressor((int(float(model_options[0]))), solver='lbfgs', random_state=19, max_iter=10000)
+        elif (int(float(model_options[1])))==2: 
+            model = MLPRegressor((int(float(model_options[0])),int(float(model_options[0]))), solver='lbfgs', random_state=19, max_iter=10000)
+        elif (int(float(model_options[1])))==3: 
+            model = MLPRegressor((int(float(model_options[0])),int(float(model_options[0])),int(float(model_options[0]))), solver='lbfgs', random_state=19, max_iter=10000)
+        elif (int(float(model_options[1])))==4: 
+            model = MLPRegressor((int(float(model_options[0])),int(float(model_options[0])),int(float(model_options[0])),int(float(model_options[0]))), solver='lbfgs', random_state=19, max_iter=10000)
+        else:
+            model = MLPRegressor((int(float(model_options[0]))*int(float(model_options[1]))), solver='lbfgs', random_state=19, max_iter=10000)
     elif model_name == 'KernelRegression':
         model = KernelRidge(alpha=float(model_options[0]), kernel='polynomial', coef0=1)
     elif model_name == 'DecisionTreeRegression':
@@ -169,7 +178,7 @@ def get_res_df(data_names: str) -> pd.DataFrame:
 
 
 def main(page: ft.Page):
-    page.title = "СмартБур"
+    page.title = "СмартБуР"
     page.theme_mode = ft.ThemeMode.DARK
     # page.vertical_alignment = ft.MainAxisAlignment.CENTER
     # page.window_width = 3000
@@ -185,7 +194,7 @@ def main(page: ft.Page):
 
     def experiment_button_click(e):
         icon_mode.name = ft.icons.LIST
-        text_mode.value = 'Планирование эксперимента'
+        text_mode.value = 'Планирование экспериментов'
         main_buttons.visible = False
         exp_field.visible = True
         back_button.disabled = False
@@ -240,7 +249,7 @@ def main(page: ft.Page):
         page.update()
 
     def pdf_instruction_click(e):
-        pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v2.pdf')
+        pdf_abs_path = os.path.abspath('pdf_instruction/Руководство пользователя v1.pdf')
         webbrowser.open_new(pdf_abs_path)
 
     def run_exe_calc(e):
@@ -253,7 +262,7 @@ def main(page: ft.Page):
             content=ft.Row(
                 [
                     ft.Image(src="icons/logo_drill_main_page.png", width=page.window_height/6, height=page.window_height/6),
-                    ft.Text('СмартБур', size=20, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD),
+                    ft.Text('СмартБуР', size=20, color=ft.colors.BLUE_GREY_800, weight=ft.FontWeight.BOLD),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 vertical_alignment=ft.CrossAxisAlignment.CENTER,
@@ -281,7 +290,7 @@ def main(page: ft.Page):
                             [
                                 ft.IconButton(ft.icons.LIST, icon_size=55, icon_color=ft.colors.BLACK87,
                                               bgcolor=ft.colors.ORANGE_700, on_click=experiment_button_click,
-                                              tooltip='Параметры эксперимента;\nМетоды планирования;\n'
+                                              tooltip='Параметры экспериментов;\nМетоды планирования;\n'
                                                       'Отображение плана;\nСохранение результатов.'),
                             ],
                         ),
@@ -1642,14 +1651,24 @@ def main(page: ft.Page):
                                                            width=150, ))
             model_options_field.visible = True
         elif model_type_dd.value == 'MLPRegression':
-            model_options_row.controls.append(ft.TextField(label='Количество нейронов',
+            model_options_row.controls.append(ft.TextField(label='Количество нейронов на слое',
                                                            label_style=ft.TextStyle(
                                                                color=ft.colors.BLACK),
                                                            color=ft.colors.BLUE_700,
                                                            text_size=15,
                                                            focused_border_color=ft.colors.BLUE_700,
                                                            cursor_color=ft.colors.BLUE_700,
-                                                           value='25',
+                                                           value='5',
+                                                           scale=0.75,
+                                                           width=150, ))
+            model_options_row.controls.append(ft.TextField(label='Количество слоев',
+                                                           label_style=ft.TextStyle(
+                                                               color=ft.colors.BLACK),
+                                                           color=ft.colors.BLUE_700,
+                                                           text_size=15,
+                                                           focused_border_color=ft.colors.BLUE_700,
+                                                           cursor_color=ft.colors.BLUE_700,
+                                                           value='2',
                                                            scale=0.75,
                                                            width=150, ))
             model_options_field.visible = True
@@ -1727,7 +1746,7 @@ def main(page: ft.Page):
                                                      active_color=ft.colors.RED_200,
                                                      border_side=ft.BorderSide(width=None, color=ft.colors.RED),
                                                      label_style=ft.TextStyle(color=ft.colors.RED),
-                                                     tooltip='Нулевое стадратное отклонение'))
+                                                     tooltip='Нулевое стандартное отклонение'))
                 else:
                     features_list.append(ft.Checkbox(label=col_name, value=all_values))
             return features_list
