@@ -283,30 +283,31 @@ def main(page: ft.Page):
 
             ft.Row(
         [
-            ft.Container(
-                content=ft.Column(
-                    [
-                        ft.Row(
-                            [
-                                ft.IconButton(ft.icons.LIST, icon_size=55, icon_color=ft.colors.BLACK87,
-                                              bgcolor=ft.colors.ORANGE_700, on_click=experiment_button_click,
-                                              tooltip='Параметры экспериментов;\nМетоды планирования;\n'
-                                                      'Отображение плана;\nСохранение результатов.'),
-                            ],
-                        ),
-                        ft.Row(
-                            [
-                                ft.Text('Планирование эксперимента', color=ft.colors.BLUE_GREY_800,
-                                        weight=ft.FontWeight.BOLD),
-                            ],
-                        ),
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER,
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                ),
-                height=page.window_height/2 - my_app_bar_h*2,
-                alignment=ft.alignment.center,
-            ),
+            # Show\Hide Design of Experiments
+            # ft.Container(
+            #     content=ft.Column(
+            #         [
+            #             ft.Row(
+            #                 [
+            #                     ft.IconButton(ft.icons.LIST, icon_size=55, icon_color=ft.colors.BLACK87,
+            #                                   bgcolor=ft.colors.ORANGE_700, on_click=experiment_button_click,
+            #                                   tooltip='Параметры экспериментов;\nМетоды планирования;\n'
+            #                                           'Отображение плана;\nСохранение результатов.'),
+            #                 ],
+            #             ),
+            #             ft.Row(
+            #                 [
+            #                     ft.Text('Планирование эксперимента', color=ft.colors.BLUE_GREY_800,
+            #                             weight=ft.FontWeight.BOLD),
+            #                 ],
+            #             ),
+            #         ],
+            #         alignment=ft.MainAxisAlignment.CENTER,
+            #         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            #     ),
+            #     height=page.window_height/2 - my_app_bar_h*2,
+            #     alignment=ft.alignment.center,
+            # ),
             ft.Container(
                 content=ft.Column(
                     [
@@ -315,7 +316,7 @@ def main(page: ft.Page):
                                 ft.IconButton(ft.icons.FILE_UPLOAD, icon_size=55, icon_color=ft.colors.BLACK87,
                                               bgcolor=ft.colors.ORANGE_700, on_click=load_file_click,
                                               tooltip='Загрузка данных .xlsx;\nВизуализация в виде таблицы;\n'
-                                                      'Расчет стоимости БР;\nМатрица корреляций.'),
+                                                      'Расчет стоимости БР.'), # \nМатрица корреляций.
                             ],
                         ),
                         ft.Row(
@@ -940,6 +941,7 @@ def main(page: ft.Page):
     # --- LOADING FILES --- #
 
     page.counter_new_line_table = 0
+    page.cost_list_to_save = []
 
     def add_new_row_data(e):
         new_row_dict = {}
@@ -968,6 +970,7 @@ def main(page: ft.Page):
                 new_cost = get_cost_br(
                     volume_arr=page.df_to_view.loc[len(page.df_to_view.index) - 1, page.cost_dict['names']],
                     cost_arr=page.cost_dict['values'])
+                page.cost_list_to_save.append(new_cost)
                 new_data_row.cells.append(ft.DataCell(
                     ft.Text(str(new_cost), color=ft.colors.BLACK, size=9, width=50,
                             text_align=ft.alignment.center)))
@@ -1032,8 +1035,8 @@ def main(page: ft.Page):
             calculation_br_button.icon = ft.icons.CALCULATE
             calculation_br_button.icon_color = ft.colors.ORANGE_500
             calculation_br_button.update()
-            corr_matrix_button.disabled = True
-            corr_matrix_button.update()
+            # corr_matrix_button.disabled = True
+            # corr_matrix_button.update()
 
         if selected_files.value != "Файл не выбран!":
             page.counter_feat_selector = 0
@@ -1062,8 +1065,8 @@ def main(page: ft.Page):
             calculation_br_button.icon = ft.icons.CALCULATE
             calculation_br_button.icon_color = ft.colors.ORANGE_500
             calculation_br_button.update()
-            corr_matrix_button.disabled = False
-            corr_matrix_button.update()
+            # corr_matrix_button.disabled = False
+            # corr_matrix_button.update()
 
         add_feats_hist_dict_dd(e)
         pr.visible = False
@@ -1191,8 +1194,8 @@ def main(page: ft.Page):
             calculation_br_button.icon = ft.icons.CALCULATE
             calculation_br_button.icon_color = ft.colors.ORANGE_500
             calculation_br_button.update()
-            corr_matrix_button.disabled = True
-            corr_matrix_button.update()
+            # corr_matrix_button.disabled = True
+            # corr_matrix_button.update()
         else:
             page.counter_feat_selector = 0
             page.counter_target_selector = 0
@@ -1226,8 +1229,8 @@ def main(page: ft.Page):
             calculation_br_button.icon = ft.icons.CALCULATE
             calculation_br_button.icon_color = ft.colors.ORANGE_500
             calculation_br_button.update()
-            corr_matrix_button.disabled = False
-            corr_matrix_button.update()
+            # corr_matrix_button.disabled = False
+            # corr_matrix_button.update()
 
         add_feats_hist_dict_dd(e)
         dialog_files_db.open = False
@@ -1298,6 +1301,8 @@ def main(page: ft.Page):
                 cost_br = get_cost_br(volume_arr=page.df_to_view.loc[idx_row, page.cost_dict['names']],
                                       cost_arr=page.cost_dict['values'])
 
+                page.cost_list_to_save.append(cost_br)
+
                 datatable.rows[idx_row].cells.append(ft.DataCell(
                     ft.Text(str(cost_br), color=ft.colors.BLACK, size=9, width=50,
                             text_align=ft.alignment.center)))
@@ -1331,8 +1336,13 @@ def main(page: ft.Page):
         if file_saving_field.value != '':
             if file_saving_field.value.endswith('.xlsx'):
                 file_saving_field.value = file_saving_field.value[:-5]
+            if len(page.cost_list_to_save) == page.df_to_view.shape[0]:
+                page.df_to_view['Стоимость БР'] = page.cost_list_to_save
             page.df_to_view.to_excel(os.path.join('uploads', file_saving_field.value + file_saving_field.suffix_text),
                                      index=False)
+            if 'Стоимость БР' in page.df_to_view.columns:
+                del page.df_to_view['Стоимость БР']
+
             dialog_save_file.open = False
             dialog_save_file.update()
 
@@ -1516,12 +1526,13 @@ def main(page: ft.Page):
                         lv,
                         add_new_line_row,
                         new_line_field,
-                        ft.Row(
-                            [
-                                corr_matrix_button,
-                            ],
-                            alignment=ft.MainAxisAlignment.CENTER,
-                        ),
+                        # Show\Hide corr matrix functional
+                        # ft.Row(
+                        #     [
+                        #         corr_matrix_button,
+                        #     ],
+                        #     alignment=ft.MainAxisAlignment.CENTER,
+                        # ),
                         save_and_download_field,
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -1648,7 +1659,8 @@ def main(page: ft.Page):
                                                            cursor_color=ft.colors.BLUE_700,
                                                            value='1.0',
                                                            scale=0.75,
-                                                           width=150, ))
+                                                           width=150,
+                                                           disabled=True))
             model_options_field.visible = True
         elif model_type_dd.value == 'MLPRegression':
             model_options_row.controls.append(ft.TextField(label='Количество нейронов на слое',
@@ -1660,7 +1672,8 @@ def main(page: ft.Page):
                                                            cursor_color=ft.colors.BLUE_700,
                                                            value='5',
                                                            scale=0.75,
-                                                           width=150, ))
+                                                           width=150,
+                                                           disabled=True))
             model_options_row.controls.append(ft.TextField(label='Количество слоев',
                                                            label_style=ft.TextStyle(
                                                                color=ft.colors.BLACK),
@@ -1670,7 +1683,8 @@ def main(page: ft.Page):
                                                            cursor_color=ft.colors.BLUE_700,
                                                            value='2',
                                                            scale=0.75,
-                                                           width=150, ))
+                                                           width=150,
+                                                           disabled=True))
             model_options_field.visible = True
         elif model_type_dd.value == 'KernelRegression':
             model_options_row.controls.append(ft.TextField(label='L1 регуляризатор',
@@ -1682,7 +1696,8 @@ def main(page: ft.Page):
                                                            cursor_color=ft.colors.BLUE_700,
                                                            value='0.01',
                                                            scale=0.75,
-                                                           width=150, ))
+                                                           width=150,
+                                                           disabled=True))
             model_options_field.visible = True
         elif model_type_dd.value == 'DecisionTreeRegression':
             model_options_row.controls.append(ft.TextField(label='Глубина дерева',
@@ -1694,7 +1709,8 @@ def main(page: ft.Page):
                                                            cursor_color=ft.colors.BLUE_700,
                                                            value='3',
                                                            scale=0.75,
-                                                           width=150, ))
+                                                           width=150,
+                                                           disabled=True))
             model_options_field.visible = True
         else:
             model_options_field.visible = False
@@ -1705,14 +1721,16 @@ def main(page: ft.Page):
         label='Тип модели',
         label_style=ft.TextStyle(color=ft.colors.BLACK),
         hint_style=ft.TextStyle(color=ft.colors.BLUE_900),
-        hint_text='Выбрать тип модели',
+        hint_text=None, # 'Выбрать тип модели',
         text_style=ft.TextStyle(color=ft.colors.BLUE_900),
-        options=[ft.dropdown.Option('LinearRegression'),
-                 ft.dropdown.Option('RidgeRegression'),
-                 ft.dropdown.Option('ARDRegression'),
-                 ft.dropdown.Option('MLPRegression'),
+        options=[
+                 # ft.dropdown.Option('LinearRegression'),
+                 # ft.dropdown.Option('RidgeRegression'),
+                 # ft.dropdown.Option('ARDRegression'),
+                 # ft.dropdown.Option('MLPRegression'),
                  ft.dropdown.Option('KernelRegression'),
-                 ft.dropdown.Option('DecisionTreeRegression')],
+                 # ft.dropdown.Option('DecisionTreeRegression')
+                 ],
         autofocus=True,
         border_color=ft.colors.ORANGE_100,
         focused_border_color=ft.colors.ORANGE_500,
@@ -3128,7 +3146,7 @@ def main(page: ft.Page):
         hint_text='Выбрать алгоритм оптимизации',
         text_style=ft.TextStyle(color=ft.colors.BLUE_900),
         options=[ft.dropdown.Option('NSGA-II'),
-                 ft.dropdown.Option('TPE'),
+                 # ft.dropdown.Option('TPE'),
                  ],
         autofocus=False,
         border_color=ft.colors.ORANGE_600,
@@ -3157,7 +3175,8 @@ def main(page: ft.Page):
                                               focused_border_color=ft.colors.BLUE_700,
                                               cursor_color=ft.colors.BLUE_700,
                                               scale=0.85,
-                                              width=150, )
+                                              width=150,
+                                              disabled=True)
 
     num_generation_text_field = ft.TextField(label='Количество шагов поиска',
                                              label_style=ft.TextStyle(
@@ -3168,7 +3187,8 @@ def main(page: ft.Page):
                                              focused_border_color=ft.colors.BLUE_700,
                                              cursor_color=ft.colors.BLUE_700,
                                              scale=0.85,
-                                             width=150, )
+                                             width=150,
+                                             disabled=True)
 
     use_step_checkbox = ft.Checkbox(label='Использовать заданный шаг', value=False, scale=0.85,
                                     check_color=ft.colors.ORANGE_700,
