@@ -338,8 +338,7 @@ def main(page: ft.Page):
                             [
                                 ft.IconButton(ft.icons.MODEL_TRAINING, icon_size=55, icon_color=ft.colors.BLACK87,
                                               bgcolor=ft.colors.ORANGE_700, on_click=model_training_click,
-                                              tooltip='Гистограммы распределения;\nОбучение моделей;\n'
-                                                      'Сохранение моделей;\nПредсказание моделей;\nАнализ моделей.'),
+                                              tooltip='Обучение моделей;\nСохранение моделей.'), # Гистограммы распределения;\nПредсказание моделей;\nАнализ моделей.
                             ],
                         ),
                         ft.Row(
@@ -1068,7 +1067,7 @@ def main(page: ft.Page):
             # corr_matrix_button.disabled = False
             # corr_matrix_button.update()
 
-        add_feats_hist_dict_dd(e)
+        # add_feats_hist_dict_dd(e)
         pr.visible = False
         pr.update()
         selected_files.update()
@@ -1232,7 +1231,7 @@ def main(page: ft.Page):
             # corr_matrix_button.disabled = False
             # corr_matrix_button.update()
 
-        add_feats_hist_dict_dd(e)
+        # add_feats_hist_dict_dd(e)
         dialog_files_db.open = False
         dialog_files_db.update()
         selected_files.update()
@@ -2184,7 +2183,7 @@ def main(page: ft.Page):
     # LEFT RIGHT TITLE
     left_modeling_title = ft.Row(
         [
-            ft.Text('ВИЗУАЛИЗАЦИЯ ДАННЫХ И ОБУЧЕНИЕ МОДЕЛЕЙ', style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.colors.ORANGE_800))
+            ft.Text('ОБУЧЕНИЕ МОДЕЛЕЙ', style=ft.TextStyle(weight=ft.FontWeight.BOLD, color=ft.colors.ORANGE_800))
         ],
         alignment=ft.MainAxisAlignment.CENTER,
     )
@@ -2607,7 +2606,7 @@ def main(page: ft.Page):
                 content=ft.Column(
                     [
                         left_modeling_title,
-                        hist_dist_field,
+                        # hist_dist_field,
                         ft.Row(
                             [
                                 model_type_dd,
@@ -2652,20 +2651,21 @@ def main(page: ft.Page):
                 alignment=ft.alignment.top_center,
                 expand=True,
             ),
-            ft.VerticalDivider(width=10, thickness=2, color=ft.colors.BLACK),
-            ft.Container(content=ft.Column(
-                [
-                    right_modeling_title,
-                    model_selecting_predict,
-                    inference_field,
-                    model_analyze_field,
-                ],
-                scroll=ft.ScrollMode.ALWAYS
-            ),
-                height=page.window_height - my_app_bar_h,
-                alignment=ft.alignment.top_center,
-                expand=True,
-            ),
+            # Show\Hide predict and analyze model
+            # ft.VerticalDivider(width=10, thickness=2, color=ft.colors.BLACK),
+            # ft.Container(content=ft.Column(
+            #     [
+            #         right_modeling_title,
+            #         model_selecting_predict,
+            #         inference_field,
+            #         model_analyze_field,
+            #     ],
+            #     scroll=ft.ScrollMode.ALWAYS
+            # ),
+            #     height=page.window_height - my_app_bar_h,
+            #     alignment=ft.alignment.top_center,
+            #     expand=True,
+            # ),
         ],
 
         height=page.window_height - my_app_bar_h,
@@ -3190,11 +3190,12 @@ def main(page: ft.Page):
                                              width=150,
                                              disabled=True)
 
-    use_step_checkbox = ft.Checkbox(label='Использовать заданный шаг', value=False, scale=0.85,
+    use_step_checkbox = ft.Checkbox(label='Использовать заданный шаг', value=True, scale=0.85,
                                     check_color=ft.colors.ORANGE_700,
                                     active_color=ft.colors.ORANGE_300,
                                     border_side=ft.BorderSide(width=2, color=ft.colors.ORANGE),
-                                    label_style=ft.TextStyle(color=ft.colors.BLACK))
+                                    label_style=ft.TextStyle(color=ft.colors.BLACK),
+                                    disabled=True)
 
     opt_options_GA_row = ft.Row(
         [
