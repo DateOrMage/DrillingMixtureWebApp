@@ -1720,14 +1720,14 @@ def main(page: ft.Page):
         label='Тип модели',
         label_style=ft.TextStyle(color=ft.colors.BLACK),
         hint_style=ft.TextStyle(color=ft.colors.BLUE_900),
-        hint_text=None, # 'Выбрать тип модели',
+        hint_text='Выбрать тип модели',
         text_style=ft.TextStyle(color=ft.colors.BLUE_900),
         options=[
                  # ft.dropdown.Option('LinearRegression'),
                  # ft.dropdown.Option('RidgeRegression'),
-                 # ft.dropdown.Option('ARDRegression'),
+                 ft.dropdown.Option('ARDRegression'),
                  # ft.dropdown.Option('MLPRegression'),
-                 ft.dropdown.Option('KernelRegression'),
+                 # ft.dropdown.Option('KernelRegression'),
                  # ft.dropdown.Option('DecisionTreeRegression')
                  ],
         autofocus=True,
